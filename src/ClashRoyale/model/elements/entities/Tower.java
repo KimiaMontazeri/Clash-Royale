@@ -1,22 +1,21 @@
 package ClashRoyale.model.elements.entities;
 
-public class Tower {
+import javafx.geometry.Point2D;
 
-    private final String name;
+public class Tower extends Entity {
+
     private int hp, damage;
     private final int hitSpeed;
     private final int range;
+    private boolean isDestroyed; // used for when we want to render the image of a destroyed tower
 
-    public Tower(String name, int hp, int damage, int hitSpeed, int range) {
-        this.name = name;
+    public Tower(String name, boolean isEnemy, Point2D loc, int hp, int damage, int hitSpeed, int range) {
+        super(name, isEnemy, loc);
         this.hp = hp;
         this.damage = damage;
         this.hitSpeed = hitSpeed;
         this.range = range;
-    }
-
-    public String getName() {
-        return name;
+        isDestroyed = false;
     }
 
     public int getHp() {
@@ -41,5 +40,15 @@ public class Tower {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public void attack() {
+
+    }
+
+    public void getAttacked(int damage) {
+        hp -= damage;
+        if (hp == 0)
+            isDestroyed = true;
     }
 }

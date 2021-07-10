@@ -1,6 +1,5 @@
 package ClashRoyale.model.elements.entities;
 
-import ClashRoyale.model.elements.CellValue;
 import ClashRoyale.model.elements.Direction;
 import ClashRoyale.model.elements.Target;
 import javafx.geometry.Point2D;
@@ -16,22 +15,21 @@ public class Troop extends Card {
     private final Target target;
     private final Speed speed;
     private final int hitSpeed;
-    private final int range;
+    private final double range;
     private final boolean isAreaSplash;
     private final int count;
     private final int lifetime;
     private boolean isAttacking, isWalking, isWaiting;
-    private Point2D velocity;
 
-    public Troop(String name, int cost, int hp, int damage, Target target, Speed speed, int hitSpeed,
-                 int range, boolean isAreaSplash, int count, int lifetime) {
-        super(name, cost);
+    public Troop(String name, boolean isEnemy, int cost, int hp, int damage, Target target, Speed speed, int hitSpeed,
+                 double range, boolean isAreaSplash, int count, int lifetime) {
+        super(name, isEnemy, cost);
         this.hp = hp;
         this.damage = damage;
         this.target = target;
         this.speed = speed;
         this.hitSpeed = hitSpeed;
-        this.range = range; // 0 -> melee, other -> x number of tiles will be hit
+        this.range = range; // 0 -> melee, other -> x number of tiles will be checked for attacking
         this.isAreaSplash = isAreaSplash;
         this.count = count;
         this.lifetime = lifetime;
@@ -57,7 +55,7 @@ public class Troop extends Card {
         return hitSpeed;
     }
 
-    public int getRange() {
+    public double getRange() {
         return range;
     }
 
@@ -67,10 +65,6 @@ public class Troop extends Card {
 
     public int getCount() {
         return count;
-    }
-
-    public Point2D getVelocity() {
-        return velocity;
     }
 
     public int getLifetime() {
@@ -97,12 +91,32 @@ public class Troop extends Card {
         this.damage = damage;
     }
 
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
+    }
+
+    public void setWalking(boolean walking) {
+        isWalking = walking;
+    }
+
+    public void setWaiting(boolean waiting) {
+        isWaiting = waiting;
+    }
+
+    public void attack() {
+
+    }
+
+    public void getAttacked(int damage) {
+        this.hp -= damage;
+    }
+
     public void move(Direction direction) {
         Point2D possibleVelocity = directionToPoint2D(direction);
         Point2D possibleLocation = super.getLocation().add(possibleVelocity);
     }
 
-    public void move(CellValue[][] map) {
+    public void move() {
         Point2D possibleDirection, possibleLoc;
         if (super.isEnemy())
             possibleDirection = directionToPoint2D(Direction.DOWN);
@@ -111,12 +125,7 @@ public class Troop extends Card {
 
         possibleLoc = super.getLocation().add(possibleDirection);
         // check if there's an enemy in the possible location or ...
-        if (map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] == CellValue.WATER) {
 
-        }
-        else if (range == 0) {
-
-        }
     }
 
     private Point2D directionToPoint2D(Direction direction) {

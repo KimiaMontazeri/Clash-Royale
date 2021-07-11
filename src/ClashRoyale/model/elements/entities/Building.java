@@ -1,18 +1,18 @@
 package ClashRoyale.model.elements.entities;
 
-import ClashRoyale.model.elements.Target;
+import ClashRoyale.model.elements.TargetType;
 
 public class Building extends Card {
 
     private int hp;
     private int damage;
     private final int hitSpeed;
-    private final Target target;
+    private final TargetType target;
     private final double range;
     private int lifetime;
 
     public Building(String name, boolean isEnemy, int cost, int hp, int damage,
-                    int hitSpeed, Target target, double range, int lifetime) {
+                    int hitSpeed, TargetType target, double range, int lifetime) {
         super(name, isEnemy, cost);
         this.hp = hp;
         this.damage = damage;
@@ -34,7 +34,7 @@ public class Building extends Card {
         return hitSpeed;
     }
 
-    public Target getTarget() {
+    public TargetType getTarget() {
         return target;
     }
 

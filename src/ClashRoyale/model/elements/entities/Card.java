@@ -5,8 +5,8 @@ public abstract class Card extends Entity {
 
     private final int cost;
 
-    public Card(String name, boolean isEnemy, int cost) {
-        super(name, isEnemy);
+    public Card(Type type, boolean isEnemy, int cost) {
+        super(type, isEnemy);
         this.cost = cost;
     }
 

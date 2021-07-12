@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
 enum Speed {
-    SLOW, MEDIUM, FAST
+    SLOW, MEDIUM, FAST, VERY_FAST
 }
 
 public class Troop extends Card {
@@ -20,20 +20,19 @@ public class Troop extends Card {
     private int hp;
     private int damage;
     private final TargetType targetType;
-    private final Speed speed;
-    private final int hitSpeed;
+    private Speed speed;
+    private int hitSpeed;
     private final int range;
     private final boolean isAreaSplash;
     private final int count;
     private final int lifetime;
-    private boolean isAttacking, isWalking, isWaiting;
 
     private Timeline movingTimeline, attackingTimeline;
     private Entity targetEnemy;
 
-    public Troop(String name, boolean isEnemy, int cost, int hp, int damage, TargetType targetType, Speed speed, int hitSpeed,
+    public Troop(Type type, boolean isEnemy, int cost, int hp, int damage, TargetType targetType, Speed speed, int hitSpeed,
                  int range, boolean isAreaSplash, int count, int lifetime) {
-        super(name, isEnemy, cost);
+        super(type, isEnemy, cost);
         this.hp = hp;
         this.damage = damage;
         this.targetType = targetType;
@@ -81,18 +80,6 @@ public class Troop extends Card {
         return lifetime;
     }
 
-    public boolean isAttacking() {
-        return isAttacking;
-    }
-
-    public boolean isWalking() {
-        return isWalking;
-    }
-
-    public boolean isWaiting() {
-        return isWaiting;
-    }
-
     public void setHp(int hp) {
         this.hp = hp;
     }
@@ -101,55 +88,63 @@ public class Troop extends Card {
         this.damage = damage;
     }
 
-    public void setAttacking(boolean attacking) {
-        isAttacking = attacking;
+    public void setHitSpeed(int hitSpeed) {
+        this.hitSpeed = hitSpeed;
     }
 
-    public void setWalking(boolean walking) {
-        isWalking = walking;
+    public void setSpeed(Speed speed) {
+        this.speed = speed;
     }
 
-    public void setWaiting(boolean waiting) {
-        isWaiting = waiting;
+    @Override
+    public void boost(double rate) {
+        setDamage((int) (getDamage() * rate));
+        setHitSpeed((int) (getHitSpeed() * rate));
+        switch (speed) {
+            case SLOW -> setSpeed(Speed.MEDIUM);
+            case MEDIUM -> setSpeed(Speed.FAST);
+            case FAST -> setSpeed(Speed.VERY_FAST);
+        }
+    }
+
+    @Override
+    public void undoBoost(double rate) {
+        setDamage((int) (getDamage() / rate));
+        setHitSpeed((int) (getHitSpeed() / rate));
+        switch (speed) {
+            case MEDIUM -> setSpeed(Speed.SLOW);
+            case FAST -> setSpeed(Speed.MEDIUM);
+            case VERY_FAST -> setSpeed(Speed.FAST);
+        }
+    }
+
+    @Override
+    public void activate() {
+        startMovingTimeline();
     }
 
     public void attack() {
         if (targetEnemy != null) {
-            setAttacking(true);
-            if (targetEnemy instanceof Tower) {
-                Tower towerEnemy = (Tower) targetEnemy;
-                towerEnemy.getAttacked(this.damage);
-            } else if (targetEnemy instanceof Building) {
-                Building buildingEnemy = (Building) targetEnemy;
-                buildingEnemy.getAttacked(this.damage);
-            } else if (targetEnemy instanceof Troop) {
-                Troop troopEnemy = (Troop) targetEnemy;
-                troopEnemy.getAttacked(this.damage);
-            }
-
+            targetEnemy.getAttacked(this.damage);
             if (isAreaSplash) {
-                // TODO complete this statement
+                areaSplash();
             }
             return;
         }
-        setAttacking(false);
         attackingTimeline.stop();
         startMovingTimeline();
     }
 
+    public void areaSplash() {
+        // TODO complete this method (i have no idea about this)
+    }
+
+    @Override
     public void getAttacked(int damage) {
         this.hp -= damage;
-        if (this.hp <= 10)
-            setDying(true);
         if (this.hp == 0) { // has died
             // stop moving or attacking
-            if (movingTimeline != null && movingTimeline.getStatus().equals(Animation.Status.RUNNING))
-                movingTimeline.stop();
-            if (attackingTimeline != null && attackingTimeline.getStatus().equals(Animation.Status.RUNNING))
-                attackingTimeline.stop();
-
-            // remove the troop from the map
-            gameData.map[(int) getLocation().getX()][(int) getLocation().getY()] = null;
+            setDead(true);
         }
     }
 
@@ -164,9 +159,9 @@ public class Troop extends Card {
         if (isEnemy()) possibleLoc = getLocation().add(directionToPoint2D(Direction.LEFT));
         else           possibleLoc = getLocation().add(directionToPoint2D(Direction.RIGHT));
 
-        if (gameData.map[(int) possibleLoc.getY()][(int) possibleLoc.getX()] == null) {
+        if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] == null) {
             setLocation(possibleLoc);
-        } else if (gameData.map[(int) possibleLoc.getY()][(int) possibleLoc.getX()] instanceof River) {
+        } else if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof River) {
             Direction direction = findDirectionToBridge();
             possibleLoc = getLocation().add(directionToPoint2D(direction));
             setLocation(possibleLoc);
@@ -181,50 +176,35 @@ public class Troop extends Card {
         for (int i = 1; i <= range; i++) {
             x2 = x1 + i;
             y2 = y1;
-            if (x2 < gameData.colCount) { // avoiding IndexOutOfBound exception
-                entity = gameData.map[y2][x2];
-                if (canAttack(entity))
+            if (x2 < gameData.rowCount) { // avoiding IndexOutOfBound exception
+                entity = gameData.map[x2][y2];
+                if (super.isTargetType(entity, targetType) && super.canAttack(entity))
                     return entity;
             }
 
             x2 = x1 - i;
             if (x2 >= 0) { // avoiding IndexOutOfBound exception
-                entity = gameData.map[y2][x2];
-                if (canAttack(entity))
+                entity = gameData.map[x2][y2];
+                if (super.isTargetType(entity, targetType) && super.canAttack(entity))
                     return entity;
             }
 
             x2 = x1;
             y2 = y1 + i;
-            if (y2 < gameData.rowCount) { // avoiding IndexOutOfBound exception
-                entity = gameData.map[y2][x2];
-                if (canAttack(entity))
-                    return entity;
+            if (y2 < gameData.colCount) { // avoiding IndexOutOfBound exception
+                entity = gameData.map[x2][y2];
+                if (super.isTargetType(entity, targetType) && super.canAttack(entity))
+                    return entity;;
             }
 
             y2 = y1 - i;
             if (y2 <= 0) { // avoiding IndexOutOfBound exception
-                entity = gameData.map[y2][x2];
-                if (canAttack(entity))
+                entity = gameData.map[x2][y2];
+                if (super.isTargetType(entity, targetType) && super.canAttack(entity))
                     return entity;
             }
         }
         return null;
-    }
-
-    private boolean canAttack(Entity entityToAttack) {
-        if (isTargetType(entityToAttack))
-            return (entityToAttack.isEnemy() && !this.isEnemy()) ||
-                    (!entityToAttack.isEnemy() && this.isEnemy());
-        return false;
-    }
-
-    private boolean isTargetType(Entity entity) {
-        if (entity == null)
-            return false;
-        if ( (entity instanceof Building || entity instanceof Tower) && (targetType == TargetType.GROUND || targetType == TargetType.AIR_GROUND || targetType == TargetType.BUILDINGS) )
-            return true;
-        return (entity instanceof Troop) && (targetType == TargetType.GROUND || targetType == TargetType.AIR_GROUND);
     }
 
     private Direction findDirectionToBridge() {
@@ -244,9 +224,10 @@ public class Troop extends Card {
     public void startMovingTimeline() {
         double speedInSeconds = 1;
         switch (speed) {
-            case SLOW -> speedInSeconds = 0.75;
-            case MEDIUM -> speedInSeconds = 0.5;
-            case FAST -> speedInSeconds = 0.25;
+            case SLOW ->      speedInSeconds = 0.75;
+            case MEDIUM ->    speedInSeconds = 0.5;
+            case FAST ->      speedInSeconds = 0.25;
+            case VERY_FAST -> speedInSeconds = 0.15;
         }
 
         movingTimeline = new Timeline(
@@ -285,6 +266,13 @@ public class Troop extends Card {
             case LEFT -> new Point2D(-1, 0);
             case RIGHT -> new Point2D(1, 0);
         };
+    }
+
+    public void stop() {
+        if (attackingTimeline != null && attackingTimeline.getStatus().equals(Animation.Status.RUNNING))
+            attackingTimeline.stop();
+        if (movingTimeline != null && movingTimeline.getStatus().equals(Animation.Status.RUNNING))
+            movingTimeline.stop();
     }
 
 }

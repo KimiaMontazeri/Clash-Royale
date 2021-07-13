@@ -7,10 +7,26 @@ import javafx.geometry.Point2D;
 public abstract class Entity {
 
     public enum Type {
-        KING_TOWER, QUEEN_TOWER,
-        BARBARIANS, ARCHER, BABY_DRAGON, WIZARD, MINI_PEKKA, GIANT, VALKYRIE,
-        RAGE, FIRE, ARROWS,
-        CANNON, INFERNO_TOWER
+        KING_TOWER(0, 'K'), QUEEN_TOWER(0, 'Q'),
+        BARBARIANS(5, 'B'), ARCHER(3, 'A'), BABY_DRAGON(4, 'D'), WIZARD(5, 'W'), MINI_PEKKA(4, 'P'), GIANT(5, 'G'), VALKYRIE(4, 'V'),
+        RAGE(3, 'R'), FIRE(4, 'F'), ARROWS(3, 'a'),
+        CANNON(3, 'C'), INFERNO_TOWER(5, 'I');
+
+        int cost;
+        char c;
+
+        Type(int cost, char c) {
+            this.cost = cost;
+            this.c = c;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public char getC() {
+            return c;
+        }
     }
 
     private final Type type;

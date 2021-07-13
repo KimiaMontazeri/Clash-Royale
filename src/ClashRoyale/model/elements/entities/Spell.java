@@ -12,27 +12,27 @@ import java.util.ArrayList;
 public class Spell extends Card {
 
     private final int radius;
-    private int duration = 2;
+    private double duration = 2;
     private int areaDamage;
     private final ArrayList<Entity> targets;
     private Timeline timeline;
     private double rate = 1;
 
-    public Spell(Type type, boolean isEnemy, int cost, int radius, int var) {
-        super(type, isEnemy, cost);
+    public Spell(Type type, boolean isEnemy, int radius, double var) {
+        super(type, isEnemy);
         this.radius = radius;
         targets = new ArrayList<>();
         if (type.equals(Type.RAGE))
             this.duration = var;
         else if (type.equals(Type.ARROWS) || type.equals(Type.FIRE))
-            this.areaDamage = var;
+            this.areaDamage = (int) var;
     }
 
     public int getRadius() {
         return radius;
     }
 
-    public int getDuration() {
+    public double getDuration() {
         return duration;
     }
 
@@ -65,7 +65,7 @@ public class Spell extends Card {
                     }
                 })
         );
-        timeline.setCycleCount(duration + 1);
+        timeline.setCycleCount((int) (duration + 1));
         timeline.play();
     }
 

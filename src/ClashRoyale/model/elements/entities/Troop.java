@@ -10,29 +10,28 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
-enum Speed {
-    SLOW, MEDIUM, FAST, VERY_FAST
-}
 
 public class Troop extends Card {
+
+    public enum Speed {
+        SLOW, MEDIUM, FAST, VERY_FAST
+    }
 
     // attributes
     private int hp;
     private int damage;
     private final TargetType targetType;
     private Speed speed;
-    private int hitSpeed;
+    private double hitSpeed;
     private final int range;
     private final boolean isAreaSplash;
-    private final int count;
-    private final int lifetime;
 
     private Timeline movingTimeline, attackingTimeline;
     private Entity targetEnemy;
 
-    public Troop(Type type, boolean isEnemy, int cost, int hp, int damage, TargetType targetType, Speed speed, int hitSpeed,
-                 int range, boolean isAreaSplash, int count, int lifetime) {
-        super(type, isEnemy, cost);
+    public Troop(Type type, boolean isEnemy, int hp, int damage, TargetType targetType, Speed speed, double hitSpeed,
+                 int range, boolean isAreaSplash) {
+        super(type, isEnemy);
         this.hp = hp;
         this.damage = damage;
         this.targetType = targetType;
@@ -40,8 +39,6 @@ public class Troop extends Card {
         this.hitSpeed = hitSpeed;
         this.range = range; // 1 -> melee, other -> x number of tiles will be checked for attacking
         this.isAreaSplash = isAreaSplash;
-        this.count = count;
-        this.lifetime = lifetime;
     }
 
     public int getHp() {
@@ -60,7 +57,7 @@ public class Troop extends Card {
         return speed;
     }
 
-    public int getHitSpeed() {
+    public double getHitSpeed() {
         return hitSpeed;
     }
 
@@ -72,14 +69,6 @@ public class Troop extends Card {
         return isAreaSplash;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public int getLifetime() {
-        return lifetime;
-    }
-
     public void setHp(int hp) {
         this.hp = hp;
     }
@@ -88,7 +77,7 @@ public class Troop extends Card {
         this.damage = damage;
     }
 
-    public void setHitSpeed(int hitSpeed) {
+    public void setHitSpeed(double hitSpeed) {
         this.hitSpeed = hitSpeed;
     }
 
@@ -136,13 +125,27 @@ public class Troop extends Card {
     }
 
     public void areaSplash() {
-        // TODO complete this method (i have no idea about this)
+        int x = (int) getLocation().getX(), y = (int) getLocation().getY();
+        Entity[] entities = new Entity[8];
+        entities[0] = gameData.map[x - 1][y - 1];
+        entities[1] = gameData.map[x][y - 1];
+        entities[2] = gameData.map[x + 1][y + 1];
+        entities[3] = gameData.map[x - 1][y];
+        entities[4] = gameData.map[x + 1][y];
+        entities[5] = gameData.map[x - 1][y - 1];
+        entities[6] = gameData.map[x][y - 1];
+        entities[7] = gameData.map[x + 1][y - 1];
+
+        for (Entity e : entities) {
+            if (e != null && e != targetEnemy && super.isTargetType(e, targetType) && super.canAttack(e))
+                e.getAttacked(this.damage);
+        }
     }
 
     @Override
     public void getAttacked(int damage) {
         this.hp -= damage;
-        if (this.hp == 0) { // has died
+        if (this.hp <= 0) { // has died
             // stop moving or attacking
             setDead(true);
         }

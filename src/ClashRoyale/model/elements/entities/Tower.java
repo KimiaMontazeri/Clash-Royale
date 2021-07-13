@@ -11,13 +11,13 @@ import javafx.util.Duration;
 public class Tower extends Entity {
 
     private int hp, damage;
-    private int hitSpeed;
+    private double hitSpeed;
     private final int range;
     private boolean isActivated;
 
     private Timeline attackingTimeline;
 
-    public Tower(Type type, boolean isEnemy, Point2D loc, int hp, int damage, int hitSpeed, int range) {
+    public Tower(Type type, boolean isEnemy, Point2D loc, int hp, int damage, double hitSpeed, int range) {
         super(type, isEnemy, loc);
         this.hp = hp;
         this.damage = damage;
@@ -34,7 +34,7 @@ public class Tower extends Entity {
         return damage;
     }
 
-    public int getHitSpeed() {
+    public double getHitSpeed() {
         return hitSpeed;
     }
 
@@ -54,7 +54,7 @@ public class Tower extends Entity {
         this.damage = damage;
     }
 
-    public void setHitSpeed(int hitSpeed) {
+    public void setHitSpeed(double hitSpeed) {
         this.hitSpeed = hitSpeed;
     }
 
@@ -109,7 +109,7 @@ public class Tower extends Entity {
     @Override
     public void getAttacked(int damage) {
         hp -= damage;
-        if (hp == 0) {
+        if (hp <= 0) {
             setDead(true);
             stop();
         }

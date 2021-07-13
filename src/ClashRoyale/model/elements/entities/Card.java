@@ -1,16 +1,20 @@
 package ClashRoyale.model.elements.entities;
 
 
+import javafx.scene.image.Image;
+
 public abstract class Card extends Entity {
+    private Image cardImage;
 
-    private final int cost;
-
-    public Card(Type type, boolean isEnemy, int cost) {
+    public Card(Type type, boolean isEnemy) {
         super(type, isEnemy);
-        this.cost = cost;
     }
 
-    public int getCost() {
-        return cost;
+    public Image getCardImage() {
+        return cardImage;
+    }
+
+    public void setCardImage(Image cardImage) {
+        this.cardImage = cardImage;
     }
 }

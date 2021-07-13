@@ -12,7 +12,8 @@ public class Building extends Card {
 
     private int hp;
     private int damage;
-    private int hitSpeed;
+    private int maxDamage;
+    private double hitSpeed;
     private final TargetType targetType;
     private final int range;
     private int lifetime;
@@ -20,11 +21,12 @@ public class Building extends Card {
     private Timeline attackingTimeline;
     private Entity targetEnemy;
 
-    public Building(Type type, boolean isEnemy, int cost, int hp, int damage,
-                    int hitSpeed, TargetType targetType, int range, int lifetime) {
-        super(type, isEnemy, cost);
+    public Building(Type type, boolean isEnemy, int hp, int damage,
+                    double hitSpeed, TargetType targetType, int range, int lifetime) {
+        super(type, isEnemy);
         this.hp = hp;
         this.damage = damage;
+        this.maxDamage = damage;
         this.hitSpeed = hitSpeed;
         this.targetType = targetType;
         this.range = range;
@@ -39,7 +41,11 @@ public class Building extends Card {
         return damage;
     }
 
-    public int getHitSpeed() {
+    public int getMaxDamage() {
+        return maxDamage;
+    }
+
+    public double getHitSpeed() {
         return hitSpeed;
     }
 
@@ -63,7 +69,11 @@ public class Building extends Card {
         this.damage = damage;
     }
 
-    public void setHitSpeed(int hitSpeed) {
+    public void setMaxDamage(int maxDamage) {
+        this.maxDamage = maxDamage;
+    }
+
+    public void setHitSpeed(double hitSpeed) {
         this.hitSpeed = hitSpeed;
     }
 
@@ -99,19 +109,21 @@ public class Building extends Card {
                     }
                 })
         );
-        attackingTimeline.setCycleCount(lifetime / hitSpeed);
+        attackingTimeline.setCycleCount((int) (lifetime / hitSpeed));
         attackingTimeline.play();
     }
 
     public void decrementLifetime() {
         lifetime--;
-        if (lifetime == 0)
+        if (lifetime == 0) {
             setDead(true);
+            stop();
+        }
     }
 
     public void attack() {
-        if (getType().equals(Type.INFERNO_TOWER) && targetEnemy != null && lifetime <= 25)
-            this.damage += 5;
+        if (getType().equals(Type.INFERNO_TOWER) && targetEnemy != null && damage <= maxDamage)
+            this.damage += 15;
 
         if (targetEnemy != null) {
             targetEnemy.getAttacked(this.damage);
@@ -166,12 +178,15 @@ public class Building extends Card {
     public void getAttacked(int damage) {
         this.hp -= damage;
 
-        if (this.hp == 0) { // has been destroyed by enemy
+        if (this.hp <= 0) { // has been destroyed by enemy
             // stop attacking
-            if (attackingTimeline != null && attackingTimeline.getStatus().equals(Animation.Status.RUNNING))
-                attackingTimeline.stop();
-
             setDead(true);
+            stop();
         }
+    }
+
+    public void stop() {
+        if (attackingTimeline != null && attackingTimeline.getStatus().equals(Animation.Status.RUNNING))
+            attackingTimeline.stop();
     }
 }

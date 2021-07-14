@@ -10,7 +10,7 @@ public abstract class Entity {
         KING_TOWER(0, 'K'), QUEEN_TOWER(0, 'Q'),
         BARBARIANS(5, 'B'), ARCHER(3, 'A'), BABY_DRAGON(4, 'D'), WIZARD(5, 'W'), MINI_PEKKA(4, 'P'), GIANT(5, 'G'), VALKYRIE(4, 'V'),
         RAGE(3, 'R'), FIRE(4, 'F'), ARROWS(3, 'a'),
-        CANNON(3, 'C'), INFERNO_TOWER(5, 'I');
+        CANNON(3, 'C'), INFERNO_TOWER(5, 'I'), RIVER(0, 'R');
 
         int cost;
         char c;
@@ -91,9 +91,11 @@ public abstract class Entity {
             return true;
         if (target instanceof Tower) {
             Tower tower = (Tower) target;
-            if (targetType == TargetType.GROUND || targetType == TargetType.AIR_GROUND || targetType == TargetType.BUILDINGS)
+            if (!tower.isDead() && (targetType == TargetType.GROUND || targetType == TargetType.AIR_GROUND || targetType == TargetType.BUILDINGS))
                 return true;
         }
+        if (target.getType() == Type.BABY_DRAGON && targetType == TargetType.AIR_GROUND)
+            return true;
         return (target instanceof Troop) && (targetType == TargetType.GROUND || targetType == TargetType.AIR_GROUND);
     }
 }

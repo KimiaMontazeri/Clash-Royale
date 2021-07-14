@@ -13,7 +13,7 @@ public class Tower extends Entity {
     private int hp, damage;
     private double hitSpeed;
     private final int range;
-    private boolean isActivated;
+    private boolean isActivated, isAttacked;
 
     private Timeline attackingTimeline;
 
@@ -23,7 +23,7 @@ public class Tower extends Entity {
         this.damage = damage;
         this.hitSpeed = hitSpeed;
         this.range = range;
-        isActivated = false;
+        isActivated = isAttacked = false;
     }
 
     public int getHp() {
@@ -44,6 +44,10 @@ public class Tower extends Entity {
 
     public boolean isActivated() {
         return isActivated;
+    }
+
+    public boolean isAttacked() {
+        return isAttacked;
     }
 
     public void setHp(int hp) {
@@ -108,6 +112,7 @@ public class Tower extends Entity {
 
     @Override
     public void getAttacked(int damage) {
+        isAttacked = true;
         hp -= damage;
         if (hp <= 0) {
             setDead(true);

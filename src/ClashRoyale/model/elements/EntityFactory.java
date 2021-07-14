@@ -10,10 +10,13 @@ import java.util.Arrays;
 
 public class EntityFactory {
 
-    public static ArrayList<Entity> createEntity(Entity.Type type, int x, int y, GameData gameData, boolean isEnemy, int level) {
-        if (x < 0 || x >= gameData.rowCount || y < 0 || y >= gameData.colCount || gameData.map[x][y] == null) {
-            // throw exception
-        }
+    public static ArrayList<Entity> createEntity(Entity.Type type, int x, int y,
+                                                 GameData gameData, boolean isEnemy, int level) throws IllegalArgumentException {
+        if (x < 0 || x >= gameData.rowCount || y < 0 || y >= gameData.colCount || gameData.map[x][y] == null)
+            throw new IllegalArgumentException("invalid x y coordinate");
+        if ((type != Entity.Type.RAGE && type != Entity.Type.FIRE && type != Entity.Type.ARROWS) && isInTerritory(x, y, isEnemy, gameData))
+            throw new IllegalArgumentException("cannot place the card here");
+
         Point2D loc = new Point2D(x,y);
         ArrayList<Entity> entities = new ArrayList<>();
         switch (type) {
@@ -33,6 +36,25 @@ public class EntityFactory {
             case INFERNO_TOWER -> entities.add(createInfernoTower(loc, isEnemy, level, gameData));
         }
         return entities;
+    }
+
+    public static boolean isInTerritory(int x, int y, boolean isEnemy, GameData gameData) {
+        if (isEnemy) {
+            if (gameData.blueKingTerritory != null && gameData.blueKingTerritory.isInTerritory(x,y))
+                return true;
+            if (gameData.blueQueenUpTerritory != null && gameData.blueQueenUpTerritory.isInTerritory(x,y))
+                return true;
+            if (gameData.blueQueenDownTerritory != null && gameData.blueQueenDownTerritory.isInTerritory(x,y))
+                return true;
+        } else {
+            if (gameData.redKingTerritory != null && gameData.redKingTerritory.isInTerritory(x,y))
+                return true;
+            if (gameData.redQueenUpTerritory != null && gameData.redQueenUpTerritory.isInTerritory(x,y))
+                return true;
+            if (gameData.redQueenDownTerritory != null && gameData.redQueenDownTerritory.isInTerritory(x,y))
+                return true;
+        }
+        return true;
     }
 
     public static Entity createKingTower(Point2D loc, boolean isEnemy, int level, GameData gameData) {

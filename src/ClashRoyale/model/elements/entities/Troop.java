@@ -5,8 +5,6 @@ import ClashRoyale.model.elements.TargetType;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -14,7 +12,7 @@ import javafx.util.Duration;
 public class Troop extends Card {
 
     public enum Speed {
-        SLOW, MEDIUM, FAST, VERY_FAST
+        SLOW, MEDIUM, FAST, VERY_FAST // VERY_FAST is used for when the troop's speed is boosted
     }
 
     // attributes
@@ -87,9 +85,9 @@ public class Troop extends Card {
 
     @Override
     public void boost(double rate) {
-        setDamage((int) (getDamage() * rate));
-        setHitSpeed((int) (getHitSpeed() * rate));
-        switch (speed) {
+        setDamage((int) (getDamage() * rate));     // boosting the damage
+        setHitSpeed((int) (getHitSpeed() * rate)); // boosting the hitSpeed
+        switch (speed) {                           // boosting the speed
             case SLOW -> setSpeed(Speed.MEDIUM);
             case MEDIUM -> setSpeed(Speed.FAST);
             case FAST -> setSpeed(Speed.VERY_FAST);
@@ -98,9 +96,9 @@ public class Troop extends Card {
 
     @Override
     public void undoBoost(double rate) {
-        setDamage((int) (getDamage() / rate));
-        setHitSpeed((int) (getHitSpeed() / rate));
-        switch (speed) {
+        setDamage((int) (getDamage() / rate));     // undo the boost on damage
+        setHitSpeed((int) (getHitSpeed() / rate)); // undo the boost on hitSpeed
+        switch (speed) {                           // undo the boost on speed
             case MEDIUM -> setSpeed(Speed.SLOW);
             case FAST -> setSpeed(Speed.MEDIUM);
             case VERY_FAST -> setSpeed(Speed.FAST);
@@ -113,19 +111,22 @@ public class Troop extends Card {
     }
 
     public void attack() {
-        if (targetEnemy != null) {
+        if (targetEnemy != null && !targetEnemy.isDead()) {
             targetEnemy.getAttacked(this.damage);
             if (isAreaSplash) {
                 areaSplash();
             }
             return;
         }
+        // if this line is reached, it means that the target has dies and the troop should start walking again
         attackingTimeline.stop();
         startMovingTimeline();
     }
 
+    // attacks all the enemies surrounding this troop in 1 tile radius
     public void areaSplash() {
         int x = (int) getLocation().getX(), y = (int) getLocation().getY();
+        // finding all the 8 entities around this troop
         Entity[] entities = new Entity[8];
         entities[0] = gameData.map[x - 1][y - 1];
         entities[1] = gameData.map[x][y - 1];
@@ -146,35 +147,50 @@ public class Troop extends Card {
     public void getAttacked(int damage) {
         this.hp -= damage;
         if (this.hp <= 0) { // has died
-            // stop moving or attacking
             setDead(true);
+            stop(); // stop moving or attacking
         }
     }
 
-    public void move() {
+    public void move() { // moves one step closer to the enemy's field and meanwhile, checks for enemies to kill
         targetEnemy = findEnemy();
         if (targetEnemy != null) {
-            movingTimeline.stop();
+            movingTimeline.stop(); // stands still and starts attacking the enemy that it just found
             startAttackingTimeline();
             return;
         }
         Point2D possibleLoc;
-        if (isEnemy()) possibleLoc = getLocation().add(directionToPoint2D(Direction.LEFT));
-        else           possibleLoc = getLocation().add(directionToPoint2D(Direction.RIGHT));
+        if (isEnemy()) possibleLoc = getLocation().add(directionToPoint2D(Direction.LEFT));  // red team moves one step to the left
+        else           possibleLoc = getLocation().add(directionToPoint2D(Direction.RIGHT)); // blue team moves one step to the right
 
-        if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] == null) {
+        if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] == null) { // checking the possible location
             setLocation(possibleLoc);
-        } else if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof River) {
-            Direction direction = findDirectionToBridge();
+        } else if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof River) { // it has reached the river
+
+            Direction direction = findDirectionToBridge(); // finds the direction to the closest bridge, so that it can cross the river
             possibleLoc = getLocation().add(directionToPoint2D(direction));
             setLocation(possibleLoc);
+
+        } else if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof Building ||
+                gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof Tower) { // it has reached a building or a tower
+
+            if (getLocation().getX() >= 8) // it's in the lower half of the map (it's more realistic to move down)
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.DOWN));
+            else // it's in the upper half of the map (it's more realistic to move up)
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.UP));
+
+            setLocation(possibleLoc);
         }
+        /* else -> there's another troop (which is not an enemy) in the possible location
+           this troop will not move and waits for the other troop to pass by
+         */
     }
 
+    // finds an enemy in its range
     private Entity findEnemy() {
-        int x1 = (int) getLocation().getX();
-        int y1 = (int) getLocation().getY();
-        int x2, y2;
+        int x1 = (int) getLocation().getX(); // current x coordinate
+        int y1 = (int) getLocation().getY(); // current y coordinate
+        int x2, y2; // x,y coordinates to check
         Entity entity;
         for (int i = 1; i <= range; i++) {
             x2 = x1 + i;
@@ -197,7 +213,7 @@ public class Troop extends Card {
             if (y2 < gameData.colCount) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
                 if (super.isTargetType(entity, targetType) && super.canAttack(entity))
-                    return entity;;
+                    return entity;
             }
 
             y2 = y1 - i;
@@ -210,6 +226,7 @@ public class Troop extends Card {
         return null;
     }
 
+    // finds the closest bridge and decides which direction is better
     private Direction findDirectionToBridge() {
         int dy1, dy2;
         dy1 = Math.abs((int) (getLocation().getY() - gameData.bridgeUp.getY()));
@@ -225,23 +242,18 @@ public class Troop extends Card {
      * Will be canceled in getAttacked() method when the troop dies (hp == 0)
      */
     public void startMovingTimeline() {
-        double speedInSeconds = 1;
+        double speedInSeconds = 1; // default value (only for avoiding compile error -_-)
         switch (speed) {
-            case SLOW ->      speedInSeconds = 0.75;
+            case SLOW ->      speedInSeconds = 0.75; // these numbers may be changed later (for better smoothness)
             case MEDIUM ->    speedInSeconds = 0.5;
             case FAST ->      speedInSeconds = 0.25;
             case VERY_FAST -> speedInSeconds = 0.15;
         }
 
         movingTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(speedInSeconds), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        move();
-                    }
-                })
+                new KeyFrame(Duration.seconds(speedInSeconds), event -> move()) // calls the move() method each "speedInSeconds"
         );
-        movingTimeline.setCycleCount(Timeline.INDEFINITE);
+        movingTimeline.setCycleCount(Timeline.INDEFINITE); // will be stopped when the troop dies
         movingTimeline.play();
     }
 
@@ -251,14 +263,9 @@ public class Troop extends Card {
      */
     public void startAttackingTimeline() {
         attackingTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(hitSpeed), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        attack();
-                    }
-                })
+                new KeyFrame(Duration.seconds(hitSpeed), event -> attack()) // calls the attack method each "hitSpeed" seconds
         );
-        attackingTimeline.setCycleCount(Timeline.INDEFINITE);
+        attackingTimeline.setCycleCount(Timeline.INDEFINITE); // will be stopped if the target dies or the troop itself dies
         attackingTimeline.play();
     }
 
@@ -271,6 +278,7 @@ public class Troop extends Card {
         };
     }
 
+    // stops all the running timelines
     public void stop() {
         if (attackingTimeline != null && attackingTimeline.getStatus().equals(Animation.Status.RUNNING))
             attackingTimeline.stop();

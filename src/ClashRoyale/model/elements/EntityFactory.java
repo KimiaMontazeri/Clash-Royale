@@ -8,13 +8,17 @@ import javafx.geometry.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * This class creates entities with the given descriptions in the game's document and adds them on the map
+ * GameManager will activate these newly made entities
+ */
 public class EntityFactory {
 
     public static ArrayList<Entity> createEntity(Entity.Type type, int x, int y,
                                                  GameData gameData, boolean isEnemy, int level) throws IllegalArgumentException {
         if (x < 0 || x >= gameData.rowCount || y < 0 || y >= gameData.colCount || gameData.map[x][y] == null)
             throw new IllegalArgumentException("invalid x y coordinate");
-        if ((type != Entity.Type.RAGE && type != Entity.Type.FIRE && type != Entity.Type.ARROWS) && isInTerritory(x, y, isEnemy, gameData))
+        if ((type != Entity.Type.RAGE && type != Entity.Type.FIRE && type != Entity.Type.ARROWS) && gameData.isInTerritory(x, y, isEnemy))
             throw new IllegalArgumentException("cannot place the card here");
 
         Point2D loc = new Point2D(x,y);
@@ -36,25 +40,6 @@ public class EntityFactory {
             case INFERNO_TOWER -> entities.add(createInfernoTower(loc, isEnemy, level, gameData));
         }
         return entities;
-    }
-
-    public static boolean isInTerritory(int x, int y, boolean isEnemy, GameData gameData) {
-        if (isEnemy) {
-            if (gameData.blueKingTerritory != null && gameData.blueKingTerritory.isInTerritory(x,y))
-                return true;
-            if (gameData.blueQueenUpTerritory != null && gameData.blueQueenUpTerritory.isInTerritory(x,y))
-                return true;
-            if (gameData.blueQueenDownTerritory != null && gameData.blueQueenDownTerritory.isInTerritory(x,y))
-                return true;
-        } else {
-            if (gameData.redKingTerritory != null && gameData.redKingTerritory.isInTerritory(x,y))
-                return true;
-            if (gameData.redQueenUpTerritory != null && gameData.redQueenUpTerritory.isInTerritory(x,y))
-                return true;
-            if (gameData.redQueenDownTerritory != null && gameData.redQueenDownTerritory.isInTerritory(x,y))
-                return true;
-        }
-        return true;
     }
 
     public static Entity createKingTower(Point2D loc, boolean isEnemy, int level, GameData gameData) {
@@ -116,6 +101,7 @@ public class EntityFactory {
         return queenTower;
     }
 
+    // returns an array of barbarians because 4 barbarians should be added to the game
     public static Entity[] createBarbarians(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 0.8;
@@ -176,6 +162,7 @@ public class EntityFactory {
         return troops;
     }
 
+    // returns an array of archers because 2 archers should be added to the game
     public static Entity[] createArchers(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 1.2;

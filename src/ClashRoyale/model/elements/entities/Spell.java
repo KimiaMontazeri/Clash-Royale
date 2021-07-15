@@ -3,8 +3,6 @@ package ClashRoyale.model.elements.entities;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -12,10 +10,10 @@ import java.util.ArrayList;
 public class Spell extends Card {
 
     private final int radius;
-    private double duration = 2;
+    private double duration = 2; // default duration
     private int areaDamage;
-    private final ArrayList<Entity> targets;
-    private Timeline timeline;
+    private final ArrayList<Entity> targets; // number of targets being affected by this spell
+    private Timeline timeline; // a timeline to model the speed(for fireball & arrows) or the duration(for rage)
     private double rate = 1;
 
     public Spell(Type type, boolean isEnemy, int radius, double var) {
@@ -58,12 +56,7 @@ public class Spell extends Card {
 
     public void startTimeline() {
         timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        update();
-                    }
-                })
+                new KeyFrame(Duration.seconds(1), event -> update()) // calls update() each second for "duration + 1" times
         );
         timeline.setCycleCount((int) (duration + 1));
         timeline.play();
@@ -73,6 +66,7 @@ public class Spell extends Card {
         int x = (int) getLocation().getX();
         int y = (int) getLocation().getY();
 
+        // checks the enemies inside the radius of this spell
         for (int i = x - radius; i <= x + radius; i++) {
             for (int j = y - radius; j <= y + radius; j++) {
                 if ((x >= 0 && x < gameData.rowCount) && (y >= 0 && y < gameData.colCount)) { // avoiding index out of bounds exception
@@ -91,12 +85,12 @@ public class Spell extends Card {
             if (super.canAttack(entity))
                 entity.getAttacked(this.areaDamage);
         } else {
-            gameData.map[x][y] = this; // fire or arrows will be displayed on the map
+            gameData.map[x][y] = this; // fireball or arrows will be displayed on the map
         }
 
     }
 
-    private void activateRage(int x, int y) {
+    private void activateRage(int x, int y) { // activates rage on the given x,y coordinate
         Entity entity = gameData.map[x][y];
         if (entity != null) {
             if (!super.canAttack(entity) && (entity instanceof Tower || entity instanceof Building || entity instanceof Troop)) {
@@ -123,7 +117,7 @@ public class Spell extends Card {
                 e.undoBoost(rate);
             }
         }
-        else {
+        else { // remove the arrow/fireball from the map so that gameView will no longer render the image of them
             int x = (int) getLocation().getX();
             int y = (int) getLocation().getY();
             for (int i = x - radius; i <= x + radius; i++) {

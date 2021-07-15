@@ -4,22 +4,20 @@ import ClashRoyale.model.elements.TargetType;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.util.Duration;
 
-public class Building extends Card {
+public class Building extends Card { // can be an inferno tower or a cannon
 
     private int hp;
     private int damage;
-    private int maxDamage;
+    private int maxDamage; // this is used for inferno tower, since its damage increases when it finds a target
     private double hitSpeed;
     private final TargetType targetType;
     private final int range;
     private int lifetime;
 
-    private Timeline attackingTimeline;
-    private Entity targetEnemy;
+    private Timeline attackingTimeline; // a timeline to model the building's lifetime
+    private Entity targetEnemy;         // the building's current target
 
     public Building(Type type, boolean isEnemy, int hp, int damage,
                     double hitSpeed, TargetType targetType, int range, int lifetime) {
@@ -78,13 +76,13 @@ public class Building extends Card {
     }
 
     @Override
-    public void boost(double rate) {
+    public void boost(double rate) { // used for when Rage spell is activated on this building
         setDamage((int) (getDamage() * rate));
         setHitSpeed((int) (getHitSpeed() * rate));
     }
 
     @Override
-    public void undoBoost(double rate) {
+    public void undoBoost(double rate) { // used for when Rage spell is de-activated on this building
         setDamage((int) (getDamage() / rate));
         setHitSpeed((int) (getHitSpeed() / rate));
     }
@@ -100,16 +98,14 @@ public class Building extends Card {
      * Will be canceled if it's enemy target dies
      */
     public void startAttackingTimeline() {
+        // the timeline will call the attack() and decrementLifetime() method each "hitSpeed" time
         attackingTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(hitSpeed), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        attack();
-                        decrementLifetime();
-                    }
+                new KeyFrame(Duration.seconds(hitSpeed), event -> {
+                    attack();
+                    decrementLifetime();
                 })
         );
-        attackingTimeline.setCycleCount((int) (lifetime / hitSpeed));
+        attackingTimeline.setCycleCount((int) (lifetime / hitSpeed)); // the number of times that this timeline is going to work
         attackingTimeline.play();
     }
 
@@ -117,17 +113,16 @@ public class Building extends Card {
         lifetime--;
         if (lifetime == 0) {
             setDead(true);
-            stop();
+            stop(); // stops the timeline
         }
     }
 
     public void attack() {
-        if (getType().equals(Type.INFERNO_TOWER) && targetEnemy != null && damage <= maxDamage)
-            this.damage += 15;
-
-        if (targetEnemy != null) {
+        if (targetEnemy != null && !targetEnemy.isDead()) {
+            if (getType() == Type.INFERNO_TOWER && damage <= maxDamage)
+                this.damage += 15; // increment the damage of inferno tower
             targetEnemy.getAttacked(this.damage);
-            return;
+//            return;
         }
         targetEnemy = findEnemy();
     }
@@ -136,12 +131,12 @@ public class Building extends Card {
      * Finds an enemy in its range
      */
     private Entity findEnemy() {
-        int x1 = (int) getLocation().getX();
-        int y1 = (int) getLocation().getY();
-        int x2, y2;
+        int x1 = (int) getLocation().getX(); // troop's x coordinate
+        int y1 = (int) getLocation().getY(); // troop's y coordinate
+        int x2, y2; // coordinates to check
         Entity entity;
         for (int i = 1; i <= range; i++) {
-            x2 = x1 + i;
+            x2 = x1 + i; // starts from the front
             y2 = y1;
             if (x2 < gameData.rowCount) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
@@ -149,7 +144,7 @@ public class Building extends Card {
                     return entity;
             }
 
-            x2 = x1 - i;
+            x2 = x1 - i; // checks behind
             if (x2 >= 0) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
                 if (super.isTargetType(entity, targetType) && super.canAttack(entity))
@@ -157,14 +152,14 @@ public class Building extends Card {
             }
 
             x2 = x1;
-            y2 = y1 + i;
+            y2 = y1 + i; // checks right
             if (y2 < gameData.colCount) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
                 if (super.isTargetType(entity, targetType) && super.canAttack(entity))
                     return entity;
             }
 
-            y2 = y1 - i;
+            y2 = y1 - i; // checks left
             if (y2 <= 0) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
                 if (super.isTargetType(entity, targetType) && super.canAttack(entity))
@@ -181,7 +176,7 @@ public class Building extends Card {
         if (this.hp <= 0) { // has been destroyed by enemy
             // stop attacking
             setDead(true);
-            stop();
+            stop(); // stop the timeline
         }
     }
 

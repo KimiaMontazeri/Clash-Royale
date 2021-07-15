@@ -3,8 +3,6 @@ package ClashRoyale.model.elements.entities;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
@@ -14,8 +12,10 @@ public class Tower extends Entity {
     private double hitSpeed;
     private final int range;
     private boolean isActivated, isAttacked;
+    // isAttacked is mostly used for KingTower (Because KingTower will be activated if it gets attacked, or if one of the queen towers get damaged)
 
     private Timeline attackingTimeline;
+    private Entity targetEnemy;
 
     public Tower(Type type, boolean isEnemy, Point2D loc, int hp, int damage, double hitSpeed, int range) {
         super(type, isEnemy, loc);
@@ -92,22 +92,18 @@ public class Tower extends Entity {
      */
     public void startAttackingTimeline() {
         attackingTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(hitSpeed), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        attack();
-                    }
-                })
+                new KeyFrame(Duration.seconds(hitSpeed), event -> attack()) // calls the attack method each "hitSpeed" time
         );
-        attackingTimeline.setCycleCount(Timeline.INDEFINITE);
+        attackingTimeline.setCycleCount(Timeline.INDEFINITE); // the timeline won't be stopped until the game finishes or the tower gets destroyed
         attackingTimeline.play();
     }
 
     public void attack() {
-        Entity targetEnemy = findEnemy();
-        if (targetEnemy != null) {
+        if (targetEnemy != null && !targetEnemy.isDead()) {
             targetEnemy.getAttacked(this.damage);
+            return; // won't search for other enemies until the current target dies
         }
+        targetEnemy = findEnemy();
     }
 
     @Override

@@ -3,6 +3,7 @@ package ClashRoyale.model.elements.entities;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -24,6 +25,20 @@ public class Spell extends Card {
             this.duration = var;
         else if (type.equals(Type.ARROWS) || type.equals(Type.FIRE))
             this.areaDamage = (int) var;
+        loadImages();
+    }
+
+    private void loadImages() {
+        if (getType() == Type.FIRE) {
+            images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/explosions/fire.png")));
+        } else if (getType() == Type.ARROWS) {
+            images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/arrows/arrow.png")));
+        }
+    }
+
+    @Override
+    public Image getCurrentImage() {
+        return images.get("DEFAULT");
     }
 
     public int getRadius() {

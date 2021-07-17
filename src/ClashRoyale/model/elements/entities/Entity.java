@@ -5,7 +5,7 @@ import ClashRoyale.model.elements.TargetType;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 
 public abstract class Entity {
 
@@ -28,16 +28,16 @@ public abstract class Entity {
 
     private final Type type;
     private final boolean isEnemy; // determines whether it's on the blue team or the red team (enemy)
-    private boolean dead = false;
+    private boolean dead = false, isAttacking = false;
     private Point2D location;
     protected GameData gameData;
-    private LinkedList<Image> images; // some images of the entity in a circular linked list to create a simple animation
-    private Image currentImage;
+    protected HashMap<String, Image> images;
 
     public Entity(Type type, boolean isEnemy) {
         this.type = type;
         this.isEnemy = isEnemy;
         gameData = GameData.getInstance();
+        images = new HashMap<>(4);
     }
 
     public Entity(Type type, boolean isEnemy, Point2D location) {
@@ -59,16 +59,16 @@ public abstract class Entity {
         return location;
     }
 
-    public LinkedList<Image> getImages() {
-        return images;
+    public boolean isDead() {
+        return dead;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
     }
 
     public Image getCurrentImage() {
-        return currentImage;
-    }
-
-    public boolean isDead() {
-        return dead;
+        return null;
     }
 
     public void setDead(boolean dead) {
@@ -79,9 +79,8 @@ public abstract class Entity {
         this.location = location;
     }
 
-    public void setUpImages() {
-        images = new LinkedList<>();
-        // TODO
+    public void setAttacking(boolean attacking) {
+        isAttacking = attacking;
     }
 
     public abstract void activate(); // activates this entity

@@ -4,6 +4,7 @@ import ClashRoyale.model.elements.TargetType;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class Building extends Card { // can be an inferno tower or a cannon
@@ -29,6 +30,23 @@ public class Building extends Card { // can be an inferno tower or a cannon
         this.targetType = targetType;
         this.range = range;
         this.lifetime = lifetime;
+        loadImages();
+    }
+
+    private void loadImages() {
+        if (getType() == Type.CANNON) {
+            if (isEnemy())
+                images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/buildings/canon-red-team.png")));
+            else
+                images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/buildings/canon-blue-team.png")));
+        } else if (getType() == Type.INFERNO_TOWER) {
+            images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/buildings/inferno-tower.png")));
+        }
+    }
+
+    @Override
+    public Image getCurrentImage() {
+        return images.get("DEFAULT");
     }
 
     public int getHp() {
@@ -122,9 +140,11 @@ public class Building extends Card { // can be an inferno tower or a cannon
             if (getType() == Type.INFERNO_TOWER && damage <= maxDamage)
                 this.damage += 15; // increment the damage of inferno tower
             targetEnemy.getAttacked(this.damage);
+            setAttacking(true);
 //            return;
         }
         targetEnemy = findEnemy();
+        setAttacking(false);
     }
 
     /**

@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 public class Tower extends Entity {
@@ -24,6 +25,29 @@ public class Tower extends Entity {
         this.hitSpeed = hitSpeed;
         this.range = range;
         isActivated = isAttacked = false;
+        loadImages();
+    }
+
+    private void loadImages() {
+        if (getType() == Type.KING_TOWER) {
+            if (isEnemy())
+                images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/towers/RedKingTower.png")));
+            else
+                images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/towers/BlueKingTower.png")));
+        } else if (getType() == Type.QUEEN_TOWER) {
+            if (isEnemy())
+                images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/towers/RedQueenTower.png")));
+            else
+                images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/towers/BlueQueenTower.png")));
+        }
+        images.put("DEAD", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/explosions/black-smoke.png")));
+    }
+
+    @Override
+    public Image getCurrentImage() {
+        if (isDead())
+            return images.get("DEAD");
+        return images.get("DEFAULT");
     }
 
     public int getHp() {
@@ -101,9 +125,11 @@ public class Tower extends Entity {
     public void attack() {
         if (targetEnemy != null && !targetEnemy.isDead()) {
             targetEnemy.getAttacked(this.damage);
+            setAttacking(true);
             return; // won't search for other enemies until the current target dies
         }
         targetEnemy = findEnemy();
+        setAttacking(false);
     }
 
     @Override

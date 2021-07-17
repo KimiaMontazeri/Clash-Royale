@@ -14,7 +14,9 @@ public abstract class Card extends Entity {
         return cardImage;
     }
 
-    public void setCardImage(Image cardImage) {
-        this.cardImage = cardImage;
+    private void loadCardImage() {
+        switch (getType()) {
+
+        }
     }
 }

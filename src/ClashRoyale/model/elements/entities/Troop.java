@@ -6,6 +6,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 
@@ -37,6 +38,20 @@ public class Troop extends Card {
         this.hitSpeed = hitSpeed;
         this.range = range; // 1 -> melee, other -> x number of tiles will be checked for attacking
         this.isAreaSplash = isAreaSplash;
+        loadImages();
+    }
+
+    @Override
+    public Image getCurrentImage() {
+        if (isEnemy()) {
+            if (isAttacking())
+                return images.get("ATTACKING_ENEMY");
+            return images.get("RUNNING_ENEMY");
+        } else {
+            if (isAttacking())
+                return images.get("ATTACKING");
+            return images.get("RUNNING");
+        }
     }
 
     public int getHp() {
@@ -112,13 +127,15 @@ public class Troop extends Card {
 
     public void attack() {
         if (targetEnemy != null && !targetEnemy.isDead()) {
+            setAttacking(true);
             targetEnemy.getAttacked(this.damage);
             if (isAreaSplash) {
                 areaSplash();
             }
             return;
         }
-        // if this line is reached, it means that the target has dies and the troop should start walking again
+        // if this line is reached, it means that the target has died and the troop should start walking again
+        setAttacking(false);
         attackingTimeline.stop();
         startMovingTimeline();
     }
@@ -163,7 +180,7 @@ public class Troop extends Card {
         if (isEnemy()) possibleLoc = getLocation().add(directionToPoint2D(Direction.LEFT));  // red team moves one step to the left
         else           possibleLoc = getLocation().add(directionToPoint2D(Direction.RIGHT)); // blue team moves one step to the right
 
-        if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] == null) { // checking the possible location
+        if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] == null || getType() == Type.BABY_DRAGON) { // noting that baby dragon can fly over buildings or the river
             setLocation(possibleLoc);
         } else if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof River) { // it has reached the river
 
@@ -284,6 +301,71 @@ public class Troop extends Card {
             attackingTimeline.stop();
         if (movingTimeline != null && movingTimeline.getStatus().equals(Animation.Status.RUNNING))
             movingTimeline.stop();
+    }
+
+    private void loadImages() {
+        images.put("RUNNING", null);
+        images.put("RUNNING_ENEMY", null);
+        images.put("ATTACKING", null);
+        images.put("ATTACKING_ENEMY", null);
+        switch (getType()) {
+            case ARCHER -> loadArchers();
+            case BABY_DRAGON -> loadBabyDragon();
+            case BARBARIANS -> loadBarbarians();
+            case GIANT -> loadGiant();
+            case MINI_PEKKA -> loadMiniPekka();
+            case VALKYRIE -> loadValkyrie();
+            case WIZARD -> loadWizard();
+        }
+    }
+
+    private void loadArchers() {
+        images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer_running.gif")));
+        images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer_running_enemy.gif")));
+        images.replace("ATTACKING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer_standing.png")));
+        images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer_standing_enemy.png")));
+    }
+
+    private void loadBabyDragon() {
+        images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/baby-dragon/babydragon_fly.gif")));
+        images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/baby-dragon/babydragon_fly_enemy.gif")));
+        images.replace("ATTACKING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/baby-dragon/babydragon_attack.gif")));
+        images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/baby-dragon/babydragon_attack_enemy.gif")));
+    }
+
+    private void loadBarbarians() {
+        images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/barbarians/barbarian_running.gif")));
+        images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/barbarians/barbarian_running_enemy.gif")));
+        images.replace("ATTACKING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/barbarians/barbarian_standing.png")));
+        images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/barbarians/barbarian_standing_enemy.png")));
+    }
+
+    private void loadGiant() {
+        images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/giant/giant_running.gif")));
+        images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/giant/giant_running_enemy.gif")));
+        images.replace("ATTACKING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/giant/giant_standing.png")));
+        images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/giant/giant_standing_enemy.png")));
+    }
+
+    private void loadMiniPekka() {
+        images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/mini-pekka/pekka_running.gif")));
+        images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/mini-pekka/pekka_running_enemy.gif")));
+        images.replace("ATTACKING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/mini-pekka/pekka_standing.png")));
+        images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/mini-pekka/pekka_standing_enemy.png")));
+    }
+
+    private void loadValkyrie() {
+        images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/valkyrie/valkyrie_running.gif")));
+        images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/valkyrie/valkyrie_running_enemy.gif")));
+        images.replace("ATTACKING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/valkyrie/valkyrie_attacking.gif")));
+        images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/valkyrie/valkyrie_attacking_enemy.gif")));
+    }
+
+    private void loadWizard() {
+        images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/wizard/wizard_running.gif")));
+        images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/wizard/wizard_running_enemy.gif")));
+        images.replace("ATTACKING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/wizard/wizard_standing.png")));
+        images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/wizard/wizard_standing_enemy.png")));
     }
 
 }

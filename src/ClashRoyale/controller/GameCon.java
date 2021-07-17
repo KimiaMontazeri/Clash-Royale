@@ -47,8 +47,8 @@ public class GameCon implements EventHandler<MouseEvent> {
     @FXML
     public void initialize() {
         initCards();
-//        imageView.setOnDragOver(this::handleImageDragOver);
-//        imageView.setOnDragDropped(this::handleImageDrop);
+        imageView.setOnDragOver(this::handleImageDragOver);
+        imageView.setOnDragDropped(this::handleImageDrop);
 
 //        render();
 //        startGame();
@@ -150,7 +150,7 @@ public class GameCon implements EventHandler<MouseEvent> {
             });
             cardImageView.setOnMouseClicked(this);
             cardImageView.setCursor(Cursor.HAND);
-
+            cardImageView.setOnDragDetected(mouseEvent -> this.handleOnDragDetection(mouseEvent, cardImageView));
         } else {
             cardImageView.setOnMouseEntered(e -> scaleTrans.stop());
             cardImageView.setOnMouseExited(e -> scaleTrans.stop());
@@ -167,6 +167,31 @@ public class GameCon implements EventHandler<MouseEvent> {
         if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
             source.setImage(nextCard.getImage());
         }
+    }
+
+    @FXML
+    private void handleOnDragDetection(MouseEvent mouseEvent, ImageView imageView) {
+        selectedCard = imageView;
+        Dragboard dragboard = imageView.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent clipboardContent = new ClipboardContent();
+        clipboardContent.putImage(imageView.getImage());
+        dragboard.setContent(clipboardContent);
+        mouseEvent.consume();
+    }
+
+    @FXML
+    private void handleImageDragOver(DragEvent event) {
+        if (event.getDragboard().hasImage()) {
+            event.acceptTransferModes(TransferMode.ANY);
+        }
+    }
+
+    @FXML
+    private void handleImageDrop(DragEvent event) {
+        Image img = event.getDragboard().getImage();
+        imageView.setImage(img);
+        selectedCard.setImage(nextCard.getImage());
+        setMouseHoverOnCard(selectedCard, false);
     }
 
     public void stop() {

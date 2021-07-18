@@ -63,4 +63,8 @@ public class GameData {
         return true;
     }
 
+    public boolean isInsideMap(int x, int y) {
+        return x >= 0 && x < rowCount && y >= 0 && y < colCount;
+    }
+
 }

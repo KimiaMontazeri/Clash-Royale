@@ -1,11 +1,13 @@
 package ClashRoyale.controller;
 
+import ClashRoyale.model.elements.entities.Entity;
 import ClashRoyale.model.gamelogic.GameManager;
 import ClashRoyale.view.ClashRoyaleView;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -17,8 +19,6 @@ import javafx.util.Duration;
 
 
 public class GameCon implements EventHandler<MouseEvent> {
-
-    final private static double FRAMES_PER_SECOND = 5.0;
 
     // the VBox that is going to show 4 cards and the next 5th card
     @FXML private ImageView card1, card2, card3, card4, nextCard, imageView;
@@ -47,11 +47,12 @@ public class GameCon implements EventHandler<MouseEvent> {
     @FXML
     public void initialize() {
         initCards();
-        imageView.setOnDragOver(this::handleImageDragOver);
-        imageView.setOnDragDropped(this::handleImageDrop);
+        initTiles();
+//        imageView.setOnDragOver(this::handleImageDragOver);
+//        imageView.setOnDragDropped(this::handleImageDrop);
 
-//        render();
-//        startGame();
+        gameManager.start();
+        startGame();
 
         startGameTimer();
         startElixirTimer(2);
@@ -70,6 +71,18 @@ public class GameCon implements EventHandler<MouseEvent> {
         setMouseHoverOnCard(card4, false);
     }
 
+    public void initTiles() {
+
+        ImageView[][] tiles = clashRoyaleView.getMap();
+        for (int i = 0; i < clashRoyaleView.getRowCount(); i++) {
+            for (int j = 0; j < clashRoyaleView.getColumnCount(); j++) {
+                ImageView tile = tiles[i][j];
+                tile.setOnDragOver(this::handleImageDragOver);
+                tile.setOnDragDropped(this::handleImageDrop);
+            }
+        }
+    }
+
     public void render() {
         gameManager.updateGame();
         clashRoyaleView.update(gameManager.getGameData());
@@ -78,11 +91,8 @@ public class GameCon implements EventHandler<MouseEvent> {
     }
 
     public void startGame() {
-        long frameTimeInMillis = (long)(1000.0 / FRAMES_PER_SECOND);
         this.gameRenderingTimer = new Timeline(
-                new KeyFrame(Duration.seconds(frameTimeInMillis), event -> {
-
-                })
+                new KeyFrame(Duration.seconds(0.2), event -> render())
         );
         gameRenderingTimer.setCycleCount(Animation.INDEFINITE);
         gameRenderingTimer.play();
@@ -126,6 +136,8 @@ public class GameCon implements EventHandler<MouseEvent> {
         if (min == 1 && sec == 0) {
             elixirTimer.stop();
             startElixirTimer(1);
+        } else if (min == 0 && sec == 0) {
+            gameManager.getGameData().gameOver = true;
         }
     }
 
@@ -188,10 +200,17 @@ public class GameCon implements EventHandler<MouseEvent> {
 
     @FXML
     private void handleImageDrop(DragEvent event) {
-        Image img = event.getDragboard().getImage();
-        imageView.setImage(img);
-        selectedCard.setImage(nextCard.getImage());
-        setMouseHoverOnCard(selectedCard, false);
+
+        ImageView tile = (ImageView) event.getTarget(); // x o y esh bar axe
+        if (tile != null) {
+            System.out.println(tile.getX() / clashRoyaleView.getRowCount() + "," + tile.getY() / clashRoyaleView.getColumnCount());
+        }
+
+
+//        Image img = event.getDragboard().getImage();
+//        imageView.setImage(img);
+//        selectedCard.setImage(nextCard.getImage());
+//        setMouseHoverOnCard(selectedCard, false);
     }
 
     public void stop() {

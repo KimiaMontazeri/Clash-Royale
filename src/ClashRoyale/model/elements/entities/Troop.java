@@ -9,6 +9,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
+import java.util.HashMap;
+
 
 public class Troop extends Card {
 
@@ -38,6 +40,7 @@ public class Troop extends Card {
         this.hitSpeed = hitSpeed;
         this.range = range; // 1 -> melee, other -> x number of tiles will be checked for attacking
         this.isAreaSplash = isAreaSplash;
+        images = new HashMap<>();
         loadImages();
     }
 
@@ -128,6 +131,7 @@ public class Troop extends Card {
     public void attack() {
         if (targetEnemy != null && !targetEnemy.isDead()) {
             setAttacking(true);
+            System.out.println(getType() + " is attacking " + targetEnemy.getType());
             targetEnemy.getAttacked(this.damage);
             if (isAreaSplash) {
                 areaSplash();
@@ -142,17 +146,25 @@ public class Troop extends Card {
 
     // attacks all the enemies surrounding this troop in 1 tile radius
     public void areaSplash() {
-        int x = (int) getLocation().getX(), y = (int) getLocation().getY();
-        // finding all the 8 entities around this troop
         Entity[] entities = new Entity[8];
-        entities[0] = gameData.map[x - 1][y - 1];
-        entities[1] = gameData.map[x][y - 1];
-        entities[2] = gameData.map[x + 1][y + 1];
-        entities[3] = gameData.map[x - 1][y];
-        entities[4] = gameData.map[x + 1][y];
-        entities[5] = gameData.map[x - 1][y - 1];
-        entities[6] = gameData.map[x][y - 1];
-        entities[7] = gameData.map[x + 1][y - 1];
+        int x = (int) getLocation().getX(), y = (int) getLocation().getY(), index = -1;
+
+        if (gameData.isInsideMap(x - 1, y - 1))
+            entities[++index] = gameData.map[x - 1][y - 1];
+        if (gameData.isInsideMap(x + 1, y + 1))
+            entities[++index] = gameData.map[x + 1][y + 1];
+        if (gameData.isInsideMap(x + 1, y - 1))
+            entities[++index] = gameData.map[x + 1][y - 1];
+        if (gameData.isInsideMap(x - 1, y + 1))
+            entities[++index] = gameData.map[x - 1][y + 1];
+        if (gameData.isInsideMap(x + 1, y))
+            entities[++index] = gameData.map[x + 1][y];
+        if (gameData.isInsideMap(x - 1, y))
+            entities[++index] = gameData.map[x - 1][y];
+        if (gameData.isInsideMap(x, y + 1))
+            entities[++index] = gameData.map[x][y + 1];
+        if (gameData.isInsideMap(x, y - 1))
+            entities[++index] = gameData.map[x][y - 1];
 
         for (Entity e : entities) {
             if (e != null && e != targetEnemy && super.isTargetType(e, targetType) && super.canAttack(e))
@@ -176,31 +188,56 @@ public class Troop extends Card {
             startAttackingTimeline();
             return;
         }
-        Point2D possibleLoc;
+        // finding the possible location
+        Point2D possibleLoc, prevLoc = getLocation();
         if (isEnemy()) possibleLoc = getLocation().add(directionToPoint2D(Direction.LEFT));  // red team moves one step to the left
         else           possibleLoc = getLocation().add(directionToPoint2D(Direction.RIGHT)); // blue team moves one step to the right
+        possibleLoc = handleGoingOffscreen(possibleLoc);
+        System.out.println(getType() + " " + possibleLoc); // TODO remove this print statement
 
-        if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] == null || getType() == Type.BABY_DRAGON) { // noting that baby dragon can fly over buildings or the river
-            setLocation(possibleLoc);
-        } else if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof River) { // it has reached the river
+        // checking the possible location that has been found
+        int x = (int) possibleLoc.getX(), y = (int) possibleLoc.getY();
+        Entity nextCell = gameData.map[x][y];
 
-            Direction direction = findDirectionToBridge(); // finds the direction to the closest bridge, so that it can cross the river
-            possibleLoc = getLocation().add(directionToPoint2D(direction));
-            setLocation(possibleLoc);
-
-        } else if (gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof Building ||
-                gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()] instanceof Tower) { // it has reached a building or a tower
-
-            if (getLocation().getX() >= 8) // it's in the lower half of the map (it's more realistic to move down)
-                possibleLoc = getLocation().add(directionToPoint2D(Direction.DOWN));
-            else // it's in the upper half of the map (it's more realistic to move up)
-                possibleLoc = getLocation().add(directionToPoint2D(Direction.UP));
-
+        if (nextCell == null || getType() == Type.BABY_DRAGON) {
             setLocation(possibleLoc);
         }
-        /* else -> there's another troop (which is not an enemy) in the possible location
-           this troop will not move and waits for the other troop to pass by
-         */
+        else if (nextCell instanceof River) {
+            Direction possibleDirection = findDirectionToBridge();
+            possibleLoc = getLocation().add(directionToPoint2D(possibleDirection));
+            setLocation(possibleLoc);
+        }
+        else if (nextCell instanceof Building || nextCell instanceof  Tower) {
+            if (getLocation().getX() > 8)
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.UP));
+            else
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.DOWN));
+            setLocation(possibleLoc);
+        }
+        else return;
+
+        // update the map
+        gameData.map[(int) prevLoc.getX()][(int) prevLoc.getY()] = null;
+        gameData.map[(int) getLocation().getX()][(int) getLocation().getY()] = this;
+
+    }
+
+    private Point2D handleGoingOffscreen(Point2D possibleLoc) {
+        // troops can't go to the corners of the map
+        int x = (int) possibleLoc.getX(), y = (int) possibleLoc.getY();
+        if (x <= 0 || x >= gameData.rowCount - 2) {
+            if (y <= 15)
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.RIGHT));
+            else
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.LEFT));
+        }
+        else if (y <= 0 || y >= gameData.colCount - 2) {
+            if (x <= 8)
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.DOWN));
+            else
+                possibleLoc = getLocation().add(directionToPoint2D(Direction.UP));
+        }
+        return possibleLoc;
     }
 
     // finds an enemy in its range
@@ -234,11 +271,14 @@ public class Troop extends Card {
             }
 
             y2 = y1 - i;
-            if (y2 <= 0) { // avoiding IndexOutOfBound exception
+            if (y2 >= 0) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
                 if (super.isTargetType(entity, targetType) && super.canAttack(entity))
                     return entity;
             }
+
+            x2 = x1 + i;
+            y2 = y1 + i;
         }
         return null;
     }
@@ -261,10 +301,10 @@ public class Troop extends Card {
     public void startMovingTimeline() {
         double speedInSeconds = 1; // default value (only for avoiding compile error -_-)
         switch (speed) {
-            case SLOW ->      speedInSeconds = 0.75; // these numbers may be changed later (for better smoothness)
-            case MEDIUM ->    speedInSeconds = 0.5;
-            case FAST ->      speedInSeconds = 0.25;
-            case VERY_FAST -> speedInSeconds = 0.15;
+            case SLOW ->      speedInSeconds = 0.8; // these numbers may be changed later (for better smoothness)
+            case MEDIUM ->    speedInSeconds = 0.6;
+            case FAST ->      speedInSeconds = 0.4;
+            case VERY_FAST -> speedInSeconds = 0.2;
         }
 
         movingTimeline = new Timeline(
@@ -288,10 +328,10 @@ public class Troop extends Card {
 
     private Point2D directionToPoint2D(Direction direction) {
         return switch (direction) {
-            case UP -> new Point2D(0, 1);
-            case DOWN -> new Point2D(0, -1);
-            case LEFT -> new Point2D(-1, 0);
-            case RIGHT -> new Point2D(1, 0);
+            case UP -> new Point2D(1, 0);
+            case DOWN -> new Point2D(-1, 0);
+            case LEFT -> new Point2D(0, -1);
+            case RIGHT -> new Point2D(0, 1);
         };
     }
 

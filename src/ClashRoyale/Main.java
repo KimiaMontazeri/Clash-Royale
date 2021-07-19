@@ -10,9 +10,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../ClashRoyale/View/SignInView.fxml"));
         primaryStage.setTitle("Clash Royale");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setResizable (false);
+        primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }
 

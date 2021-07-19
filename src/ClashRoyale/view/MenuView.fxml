@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClashRoyale.controller.MenuController">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
+         <image>
+            <Image url="@../pics/maxresdefault.jpg" />
+         </image>
+      </ImageView>
+      <BorderPane layoutX="200.0" layoutY="-1.0" prefHeight="400.0" prefWidth="200.0">
+         <top>
+            <Label prefHeight="105.0" prefWidth="115.0" text="Menu" textFill="#09a7c7" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="45.0" />
+               </font>
+            </Label>
+         </top>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="profile" layoutX="32.0" layoutY="35.0" mnemonicParsing="false" onAction="#profileButtonPressed" prefHeight="30.0" prefWidth="135.0" style="-fx-background-color: #09a7c7;" text="Profile">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="battleDeck" layoutX="32.0" layoutY="79.0" mnemonicParsing="false" onAction="#battleDeckButtonPressed" prefHeight="30.0" prefWidth="135.0" style="-fx-background-color: #09a7c7;" text="Battle Deck">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="battleHistory" layoutX="32.0" layoutY="124.0" mnemonicParsing="false" onAction="#battleHistoryButtonPressed" prefHeight="30.0" prefWidth="135.0" style="-fx-background-color: #09a7c7;" text="Battle History">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="trainingCamp" layoutX="32.0" layoutY="166.0" mnemonicParsing="false" onAction="#trainingCampButtonPressed" prefHeight="30.0" prefWidth="135.0" style="-fx-background-color: #09a7c7;" text="Training Camp">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

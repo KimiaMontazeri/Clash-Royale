@@ -13,7 +13,7 @@ public class GameSetup {
     private Player currentPlayer;
     private GameData gameData;
 
-    public GameSetup(Player currentPlayer){
+    public GameSetup(Player currentPlayer){ // comment
         this.currentPlayer=currentPlayer;
     }
 

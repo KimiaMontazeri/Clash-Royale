@@ -10,6 +10,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        ///comment from negar
         Parent root = FXMLLoader.load(getClass().getResource("../ClashRoyale/View/SignInView.fxml"));
         primaryStage.setTitle("Clash Royale");
         primaryStage.setResizable (false);

@@ -15,6 +15,10 @@ public class PlayersArchieve implements Serializable {   ////singleton
         return instance;
     }
 
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
     ArrayList<Player> playersArchieve =new ArrayList<>();
     public ArrayList<Player> getPlayersArchieve() {
         return playersArchieve;

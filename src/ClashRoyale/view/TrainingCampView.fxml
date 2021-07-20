@@ -11,7 +11,7 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
          <image>
-            <Image url="@../pics/clash_of_clans-wallpaper-1920x1080%20(1).jpg" />
+            <Image url="@../resources/pics/clash_of_clans-wallpaper-1920x1080%20(1).jpg" />
          </image>
       </ImageView>
       <Label layoutX="168.0" layoutY="7.0" text="Training Camp" textAlignment="CENTER" textFill="WHITE">

@@ -2,7 +2,6 @@ package ClashRoyale.model.gamelogic;
 
 import ClashRoyale.model.GameData;
 import ClashRoyale.model.elements.EntityFactory;
-import ClashRoyale.model.elements.Player;
 import ClashRoyale.model.elements.Territory;
 import ClashRoyale.model.elements.entities.Entity;
 import ClashRoyale.model.elements.entities.River;
@@ -10,15 +9,11 @@ import ClashRoyale.model.elements.entities.Tower;
 import javafx.geometry.Point2D;
 
 public class GameSetup {
-    private Player currentPlayer;
-    private GameData gameData;
 
-    public GameSetup(Player currentPlayer){ // comment
-        this.currentPlayer=currentPlayer;
-    }
+    private final GameData gameData;
 
     public GameSetup() {
-
+        gameData = GameData.getInstance();
     }
 
     public void initMap(int level1, int level2) {
@@ -69,6 +64,13 @@ public class GameSetup {
         gameData.blueQueenDownTerritory = new Territory(8, 17, 8, 16);
         gameData.blueKingTerritory = new Territory(0, 17, 0, 8);
 
+    }
+
+    public void setUpCards() {
+        // get the players cards
+        // set 4 of them to displayedCardsHashMap in GameData
+        // set one of them to nextCard in GameData
+        // set the last 3 to upcomingCards in GameData
     }
 
 }

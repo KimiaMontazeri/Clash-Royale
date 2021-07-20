@@ -16,10 +16,15 @@ public class EntityFactory {
 
     public static ArrayList<Entity> createEntity(Entity.Type type, int x, int y,
                                                  GameData gameData, boolean isEnemy, int level) throws IllegalArgumentException {
-        if (x < 0 || x >= gameData.rowCount || y < 0 || y >= gameData.colCount || gameData.map[x][y] == null)
-            throw new IllegalArgumentException("invalid x y coordinate");
-        if ((type != Entity.Type.RAGE && type != Entity.Type.FIRE && type != Entity.Type.ARROWS) && gameData.isInTerritory(x, y, isEnemy))
-            throw new IllegalArgumentException("cannot place the card here");
+        if (x < 0) x = 1;
+        else if (x >= gameData.rowCount)
+            x = 16;
+        if (y < 0) y = 1;
+        else if (y >= gameData.colCount)
+            y = 30;
+
+//        if ((type != Entity.Type.RAGE && type != Entity.Type.FIRE && type != Entity.Type.ARROWS) && gameData.isInTerritory(x, y, isEnemy))
+//            throw new IllegalArgumentException("cannot place the card here");
 
         Point2D loc = new Point2D(x,y);
         ArrayList<Entity> entities = new ArrayList<>();
@@ -107,7 +112,7 @@ public class EntityFactory {
         double hitSpeed = 0.8;
         Speed speed = Speed.MEDIUM;
         TargetType targetType = TargetType.GROUND;
-        int range = 0, count = 4;
+        int range = 1, count = 4;
         switch (level) {
             case 1 -> {
                 hp = 300;
@@ -290,7 +295,7 @@ public class EntityFactory {
         double hitSpeed = 1.8;
         Speed speed = Speed.FAST;
         TargetType targetType = TargetType.GROUND;
-        int range = 0;
+        int range = 1;
         switch (level) {
             case 1 -> {
                 hp = 600;
@@ -325,7 +330,7 @@ public class EntityFactory {
         double hitSpeed = 1.5;
         Speed speed = Speed.SLOW;
         TargetType targetType = TargetType.BUILDINGS;
-        int range = 0;
+        int range = 1;
         switch (level) {
             case 1 -> {
                 hp = 2000;
@@ -360,7 +365,7 @@ public class EntityFactory {
         double hitSpeed = 1.5;
         Speed speed = Speed.MEDIUM;
         TargetType targetType = TargetType.GROUND;
-        int range = 0;
+        int range = 1;
         switch (level) {
             case 1 -> {
                 hp = 880;
@@ -435,7 +440,7 @@ public class EntityFactory {
             case 5 -> areaDamage = 210;
         }
 
-        Spell arrows = new Spell(Entity.Type.FIRE, isEnemy, radius, areaDamage);
+        Spell arrows = new Spell(Entity.Type.ARROWS, isEnemy, radius, areaDamage);
         arrows.setLocation(loc);
         gameData.map[(int) loc.getX()][(int) loc.getY()] = arrows;
         return arrows;

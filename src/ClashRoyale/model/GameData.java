@@ -8,6 +8,10 @@ import ClashRoyale.model.elements.entities.Entity;
 import ClashRoyale.model.elements.entities.Tower;
 import javafx.geometry.Point2D;
 
+import java.util.HashMap;
+import java.util.Queue;
+import java.util.Stack;
+
 public class GameData {
 
     private static GameData instance = null;
@@ -25,8 +29,18 @@ public class GameData {
     public Player player;
     public Bot bot;
 
+    // crowns :
+    public int blueCrownNum = 0, redCrownNum = 0;
+
+    // info about the player's cards
+    public HashMap<Integer, Entity.Type> displayedCards; // cardNumber -> cardType
+    public Entity.Type nextCard;
+    public Stack<Entity.Type> upcomingCards;  // use pop method to remove last element
+    public int elixirs = 4;
+
     // when the game is over, the user will get back to the game's menu and the instance of this class should be null again (so that we can create new GameData for further games)
     public boolean gameOver = false;
+    public String winnerName;
 
     // territory of each tower :
     public Territory blueQueenUpTerritory, blueQueenDownTerritory, blueKingTerritory;
@@ -34,6 +48,8 @@ public class GameData {
 
     private GameData() {
         map = new Entity[rowCount][colCount];
+        displayedCards = new HashMap<>(4);
+        upcomingCards = new Stack<>();
     }
 
     // using singleton pattern for this class so that we have only 1 GameData in the whole game

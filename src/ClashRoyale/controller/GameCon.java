@@ -1,13 +1,13 @@
 package ClashRoyale.controller;
 
-import ClashRoyale.model.elements.entities.Entity;
+import ClashRoyale.model.elements.entities.Card;
 import ClashRoyale.model.gamelogic.GameManager;
 import ClashRoyale.view.ClashRoyaleView;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -21,7 +21,7 @@ import javafx.util.Duration;
 public class GameCon implements EventHandler<MouseEvent> {
 
     // the VBox that is going to show 4 cards and the next 5th card
-    @FXML private ImageView card1, card2, card3, card4, nextCard, imageView;
+    @FXML private ImageView card1, card2, card3, card4, nextCard;
     @FXML private Label timer, blueCrowns, redCrowns, elixirNum;
     @FXML private ClashRoyaleView clashRoyaleView;
     private ImageView selectedCard;
@@ -46,14 +46,13 @@ public class GameCon implements EventHandler<MouseEvent> {
 
     @FXML
     public void initialize() {
+        // init game model
+        gameManager.start();
+
+        // init game view
         initCards();
         initTiles();
-//        imageView.setOnDragOver(this::handleImageDragOver);
-//        imageView.setOnDragDropped(this::handleImageDrop);
-
-        gameManager.start();
         startGame();
-
         startGameTimer();
         startElixirTimer(2);
     }
@@ -86,8 +85,17 @@ public class GameCon implements EventHandler<MouseEvent> {
     public void render() {
         gameManager.updateGame();
         clashRoyaleView.update(gameManager.getGameData());
+        updateCrowns();
+        // stop the game if it's over
         if (gameManager.getGameData().gameOver)
             stop();
+    }
+
+    private void updateCrowns() {
+        Platform.runLater(() -> {
+            redCrowns.setText(String.valueOf(gameManager.getGameData().redCrownNum));
+            blueCrowns.setText(String.valueOf(gameManager.getGameData().blueCrownNum));
+        });
     }
 
     public void startGame() {
@@ -101,9 +109,12 @@ public class GameCon implements EventHandler<MouseEvent> {
     public void startElixirTimer(int duration) {
         this.elixirTimer = new Timeline(
                 new KeyFrame(Duration.seconds(duration), event -> {
-                    int num = Integer.parseInt(elixirNum.getText());
-                    if (num <= 9)
-                        elixirNum.setText(Integer.toString(++num));
+                    int num = gameManager.getGameData().elixirs;
+                    if (num <= 9) {
+                        elixirNum.setText(Integer.toString(num));
+                        gameManager.getGameData().elixirs++;
+                        updateCardView();
+                    }
                 })
         );
         elixirTimer.setCycleCount(Animation.INDEFINITE);
@@ -141,13 +152,13 @@ public class GameCon implements EventHandler<MouseEvent> {
         }
     }
 
-    private void setMouseHoverOnCard(ImageView cardImageView, boolean bool) {
+    private void setMouseHoverOnCard(ImageView cardImageView, boolean isAffordable) {
         var scaleTrans = new ScaleTransition(Duration.millis(250), cardImageView);
         scaleTrans.setFromX(1.0);
         scaleTrans.setFromY(1.0);
         scaleTrans.setToX(1.2);
         scaleTrans.setToY(1.2);
-        if (bool) {
+        if (isAffordable) {
             cardImageView.setOnMouseEntered(e -> {
                 scaleTrans.stop();
                 scaleTrans.setRate(1.0);
@@ -200,22 +211,52 @@ public class GameCon implements EventHandler<MouseEvent> {
 
     @FXML
     private void handleImageDrop(DragEvent event) {
-
-        ImageView tile = (ImageView) event.getTarget(); // x o y esh bar axe
+        // finding the tile that the card has been dropped on
+        ImageView tile = (ImageView) event.getTarget(); // x , y esh bar axe
         if (tile != null) {
-            System.out.println(tile.getX() / clashRoyaleView.getRowCount() + "," + tile.getY() / clashRoyaleView.getColumnCount());
+            int row = (int) (tile.getX() / clashRoyaleView.getRowCount());
+            int col = (int) (tile.getY() / clashRoyaleView.getColumnCount());
+
+            Platform.runLater(() -> {
+                if (selectedCard.equals(card1)) {
+                    gameManager.useCard(1, col, row);
+                }
+                else if (selectedCard.equals(card2)) {
+                    gameManager.useCard(2, col, row);
+                }
+                else if (selectedCard.equals(card3)) {
+                    gameManager.useCard(3, col, row);
+                }
+                else if (selectedCard.equals(card4)) {
+                    gameManager.useCard(4, col, row);
+                }
+                else System.out.println("WHY HAVE I REACHED THIS LINE???");
+            });
+
+            updateCardView();
         }
+    }
 
+    private void updateCardView() {
+        Platform.runLater(() -> {
+            // update their images
+            card1.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(1)));
+            card2.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(2)));
+            card3.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(3)));
+            card4.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(4)));
 
-//        Image img = event.getDragboard().getImage();
-//        imageView.setImage(img);
-//        selectedCard.setImage(nextCard.getImage());
-//        setMouseHoverOnCard(selectedCard, false);
+            // update each card ImageView's mouse hovering event
+            setMouseHoverOnCard(card1, gameManager.getGameData().displayedCards.get(1).getCost() <= gameManager.getGameData().elixirs);
+            setMouseHoverOnCard(card2, gameManager.getGameData().displayedCards.get(2).getCost() <= gameManager.getGameData().elixirs);
+            setMouseHoverOnCard(card3, gameManager.getGameData().displayedCards.get(3).getCost() <= gameManager.getGameData().elixirs);
+            setMouseHoverOnCard(card4, gameManager.getGameData().displayedCards.get(4).getCost() <= gameManager.getGameData().elixirs);
+        });
     }
 
     public void stop() {
         this.gameTimer.stop();
         this.elixirTimer.stop();
         this.gameRenderingTimer.stop();
+        gameManager.findWinner();
     }
 }

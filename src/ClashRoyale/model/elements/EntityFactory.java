@@ -14,17 +14,19 @@ import java.util.Arrays;
  */
 public class EntityFactory {
 
-    public static ArrayList<Entity> createEntity(Entity.Type type, int x, int y,
-                                                 GameData gameData, boolean isEnemy, int level) throws IllegalArgumentException {
-        if (x < 0) x = 1;
-        else if (x >= gameData.rowCount)
+    public static ArrayList<Entity> createEntity(Entity.Type type, int x, int y, GameData gameData, boolean isEnemy, int level)
+            throws IllegalArgumentException {
+        // handling bad x,y coordinates
+        if (x <= 0) x = 1;
+        else if (x >= gameData.rowCount - 1)
             x = 16;
-        if (y < 0) y = 1;
-        else if (y >= gameData.colCount)
+        if (y <= 0) y = 1;
+        else if (y >= gameData.colCount - 1)
             y = 30;
 
-//        if ((type != Entity.Type.RAGE && type != Entity.Type.FIRE && type != Entity.Type.ARROWS) && gameData.isInTerritory(x, y, isEnemy))
-//            throw new IllegalArgumentException("cannot place the card here");
+        // handling the towers' territories (but not for spell cards)
+        if ((type != Entity.Type.RAGE && type != Entity.Type.FIRE && type != Entity.Type.ARROWS) && gameData.isInTerritory(x, y, isEnemy))
+            throw new IllegalArgumentException("cannot place the card here");
 
         Point2D loc = new Point2D(x,y);
         ArrayList<Entity> entities = new ArrayList<>();

@@ -60,7 +60,7 @@
                         <Image url="@../resources/Elixir.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="elixirNum" prefHeight="40.0" prefWidth="35.0" text="0">
+                  <Label fx:id="elixirNum" prefHeight="40.0" prefWidth="35.0" text="4">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>

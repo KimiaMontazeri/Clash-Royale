@@ -6,7 +6,6 @@ import javafx.animation.Timeline;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Set;
 
 public abstract class Bot {
 
@@ -101,6 +100,10 @@ public abstract class Bot {
      */
     public void stopBot() {
         this.timeline.stop();
+    }
+
+    public String getName() {
+        return "BOT";
     }
 
 }

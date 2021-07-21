@@ -2,6 +2,7 @@ package ClashRoyale.model.gamelogic;
 
 import ClashRoyale.model.GameData;
 import ClashRoyale.model.elements.EntityFactory;
+import ClashRoyale.model.elements.History;
 import ClashRoyale.model.elements.entities.Entity;
 import ClashRoyale.model.elements.entities.River;
 import ClashRoyale.model.elements.entities.Tower;
@@ -35,10 +36,7 @@ public class GameManager {
         gameData.blueQueenTowerDown.activate();
         gameData.redQueenTowerUp.activate();
         gameData.redQueenTowerDown.activate();
-
-        addEntity(Entity.Type.GIANT, 8, 6, false, 1);
-        addEntity(Entity.Type.MINI_PEKKA, 10, 20, true, 1);
-        addEntity(Entity.Type.VALKYRIE, 13, 8, false, 1);
+        gameData.bot.start();
     }
 
     /**
@@ -65,15 +63,16 @@ public class GameManager {
     }
 
     public void updateGame() {
+        int blueDeadTowers = 0, redDeadTowers = 0;
         if (gameData.blueQueenTowerDown.isDead()) {
             gameData.blueQueenDownTerritory.setActive(false);
-            gameData.redCrownNum++;
+            blueDeadTowers++;
             if (!gameData.blueKingTower.isActivated())
                 gameData.blueKingTower.activate();
         }
         if (gameData.blueQueenTowerUp.isDead()) {
             gameData.blueQueenUpTerritory.setActive(false);
-            gameData.redCrownNum++;
+            blueDeadTowers++;
             if (!gameData.blueKingTower.isActivated())
                 gameData.blueKingTower.activate();
         }
@@ -84,13 +83,13 @@ public class GameManager {
         }
         if (gameData.redQueenTowerDown.isDead()) {
             gameData.redQueenDownTerritory.setActive(false);
-            gameData.blueCrownNum++;
+            redDeadTowers++;
             if (!gameData.redKingTower.isActivated())
                 gameData.redKingTower.activate();
         }
         if (gameData.redQueenTowerUp.isDead()) {
             gameData.redQueenUpTerritory.setActive(false);
-            gameData.blueCrownNum++;
+            redDeadTowers++;
             if (!gameData.redKingTower.isActivated())
                 gameData.redKingTower.activate();
         }
@@ -100,6 +99,8 @@ public class GameManager {
             return;
         }
 
+        gameData.blueCrownNum = redDeadTowers;
+        gameData.redCrownNum = blueDeadTowers;
         if (gameData.redKingTower.isAttacked() && !gameData.redKingTower.isActivated())
             gameData.redKingTower.activate();
         if (gameData.blueKingTower.isAttacked() && !gameData.blueKingTower.isActivated())
@@ -115,7 +116,7 @@ public class GameManager {
         for (int row = 0; row < gameData.rowCount; row++) {
             for (int col = 0; col < gameData.colCount; col++) {
                 // updating the river
-                if ( (col == 15 && row != 4 && row != 13) || (col == 16 && row != 4 && row != 13) ) {
+                if ( (col == 15 && row != 4 && row != 13 && row != 0 && row != 17) || (col == 16 && row != 4 && row != 13 && row != 0 && row != 17) ) {
                     if (gameData.map[row][col] instanceof River || gameData.map[row][col] == null)
                         gameData.map[row][col] = new River(Entity.Type.RIVER, new Point2D(row, col));
                 }
@@ -195,5 +196,10 @@ public class GameManager {
             else
                 gameData.winnerName = gameData.bot.toString();
         }
+    }
+
+    public void endGame() {
+        History history = new History(gameData.player.getUsername(), gameData.winnerName);
+        gameData.player.addHistory(history);
     }
 }

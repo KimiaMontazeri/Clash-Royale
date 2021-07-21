@@ -8,6 +8,8 @@ import ClashRoyale.model.elements.entities.River;
 import ClashRoyale.model.elements.entities.Tower;
 import javafx.geometry.Point2D;
 
+import java.util.ArrayList;
+
 public class GameSetup {
 
     private final GameData gameData;
@@ -21,7 +23,7 @@ public class GameSetup {
         gameData.bridgeDown = new Point2D(13, 15);
         for (int row = 0; row < gameData.rowCount; row++) {
             for (int col = 0; col < gameData.colCount; col++) {
-                if ( (col == 15 && row != 4 && row != 13) || (col == 16 && row != 4 && row != 13) ) {
+                if ( (col == 15 && row != 4 && row != 13 && row != 0 && row != 17) || (col == 16 && row != 4 && row != 13 && row != 0 && row != 17) ) {
                     gameData.map[row][col] = new River(Entity.Type.RIVER, new Point2D(row, col));
                 }
                 // placing the towers
@@ -67,10 +69,16 @@ public class GameSetup {
     }
 
     public void setUpCards() {
-        // get the players cards
-        // set 4 of them to displayedCardsHashMap in GameData
-        // set one of them to nextCard in GameData
-        // set the last 3 to upcomingCards in GameData
+        ArrayList<Entity.Type> playerCards = gameData.player.getCards();
+
+        int i;
+        for (i = 0; i < 4; i++)
+            gameData.displayedCards.put(i + 1, playerCards.get(i));
+
+        gameData.nextCard = playerCards.get(4);
+
+        for (i = 5; i < playerCards.size(); i++)
+            gameData.upcomingCards.push(playerCards.get(i));
     }
 
 }

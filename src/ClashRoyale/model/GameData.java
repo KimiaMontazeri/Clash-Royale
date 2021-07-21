@@ -59,6 +59,10 @@ public class GameData {
         return instance;
     }
 
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
+
     public boolean isInTerritory(int x, int y, boolean isEnemy) {
         if (isEnemy) {
             // != null is written to avoid NullPointerException

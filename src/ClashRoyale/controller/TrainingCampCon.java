@@ -1,5 +1,9 @@
 package ClashRoyale.controller;
 
+import ClashRoyale.model.GameData;
+import ClashRoyale.model.elements.EasyBot;
+import ClashRoyale.model.elements.MediumBot;
+import ClashRoyale.model.elements.PlayersArchieve;
 import com.sun.prism.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,7 +21,10 @@ public class TrainingCampCon {
     private Stage stage;
     private Scene scene;
     private Parent root;
-
+    GameData gameData = GameData.getInstance();
+    PlayersArchieve playersArchieve = PlayersArchieve.getInstance();
+    @FXML
+    private Label ErrorLabel;
 
 
     @FXML
@@ -29,17 +37,24 @@ public class TrainingCampCon {
     private Button mediumbuttonInTrainingCamp;
 
     @FXML
-    void easyInTrainingCamp(ActionEvent event) throws IOException{
-        easybuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
-        //changeScene(event, "../View/GameCon.fxml");
+    void easyInTrainingCamp(ActionEvent event) throws IOException {
+        //easybuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
+        if (playersArchieve.getCurrentPlayer().getCards().size() == 8) {
+            gameData.setBot(new EasyBot());
+            changeScene(event, "../View/GameCon.fxml");
+        } else
+            ErrorLabel.setText("Cards Not Selected");
 
     }
 
     @FXML
-    void mediumInTrainingCamp(ActionEvent event) throws IOException{
-        mediumbuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
-
-        //changeScene(event, "../View/GameCon.fxml");
+    void mediumInTrainingCamp(ActionEvent event) throws IOException {
+        // mediumbuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
+        if (playersArchieve.getCurrentPlayer().getCards().size() == 8) {
+            gameData.setBot(new MediumBot());
+            changeScene(event, "../View/GameCon.fxml");
+        } else
+            ErrorLabel.setText("Cards Not Selected");
 
     }
 
@@ -48,9 +63,10 @@ public class TrainingCampCon {
         changeScene(event, "../View/MenuView.fxml");
 
     }
-    public void changeScene(ActionEvent event,String address) throws IOException {
+
+    public void changeScene(ActionEvent event, String address) throws IOException {
         root = FXMLLoader.load(getClass().getResource(address));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

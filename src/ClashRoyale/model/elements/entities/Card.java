@@ -28,7 +28,7 @@ public abstract class Card extends Entity {
                 return new Image("/ClashRoyale/resources/buildings/canon-card.png");
             }
             case FIRE -> {
-                return new Image("/ClashRoyale/resources/explosions/fire.png");
+                return new Image("/ClashRoyale/resources/fireball/fireball-card.png");
             }
             case GIANT -> {
                 return new Image("/ClashRoyale/resources/troops/giant/giant.png");

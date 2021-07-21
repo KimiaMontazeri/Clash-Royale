@@ -1,6 +1,7 @@
 package ClashRoyale.model.elements;
 
 import ClashRoyale.model.elements.entities.Entity;
+import ClashRoyale.model.elements.entities.River;
 import ClashRoyale.model.elements.entities.Tower;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -106,7 +107,7 @@ public class MediumBot extends Bot {
                 for (int row = 0; row < gameData.rowCount; row++) {
                     for (int col = 0; col < gameData.colCount; col++) {
                         Entity entity = gameData.map[row][col];
-                        if (entity != null && !entity.isEnemy()) {
+                        if (entity != null && !entity.isEnemy() && !(entity instanceof River)) {
                             x = (int) entity.getLocation().getX();
                             y = (int) entity.getLocation().getY();
                             return;

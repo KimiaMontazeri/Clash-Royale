@@ -46,8 +46,6 @@ public abstract class Bot {
 
     protected Entity.Type chooseTroop() {
         int r = randomGenerator.nextInt(7);
-        if (r == 0)
-            return Entity.Type.BARBARIANS;
         if (r == 1)
             return Entity.Type.ARCHER;
         if (r == 2)

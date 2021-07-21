@@ -94,7 +94,8 @@ public class GameCon implements EventHandler<MouseEvent> {
                     int num = gameManager.getGameData().elixirs;
                     if (num <= 10) {
                         elixirNum.setText(Integer.toString(num));
-                        gameManager.getGameData().elixirs++;
+                        if (num != 10)
+                            gameManager.getGameData().elixirs++;
                         updateCardView();
                     }
                 })
@@ -155,6 +156,7 @@ public class GameCon implements EventHandler<MouseEvent> {
             });
             cardImageView.setOnMouseClicked(this);
             cardImageView.setCursor(Cursor.HAND);
+            cardImageView.setOpacity(1.0);
             cardImageView.setOnDragDetected(mouseEvent -> this.handleOnDragDetection(mouseEvent, cardImageView));
         } else {
             cardImageView.setOnMouseEntered(e -> scaleTrans.stop());
@@ -221,11 +223,13 @@ public class GameCon implements EventHandler<MouseEvent> {
 
     private void updateCardView() {
         Platform.runLater(() -> {
-            // update their images
+            // update cards' images
             card1.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(1)));
             card2.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(2)));
             card3.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(3)));
             card4.setImage(Card.loadCardImage(gameManager.getGameData().displayedCards.get(4)));
+
+            nextCard.setImage(Card.loadCardImage(gameManager.getGameData().nextCard));
 
             // update each card ImageView's mouse hovering event
             setMouseHoverOnCard(card1, gameManager.getGameData().displayedCards.get(1).getCost() <= gameManager.getGameData().elixirs);
@@ -250,7 +254,7 @@ public class GameCon implements EventHandler<MouseEvent> {
     private void switchToBattleHistory() {
         try {
             Stage stage = (Stage) nextCard.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/view/BattleHistoryView.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/ClashRoyale/view/BattleHistoryView.fxml"));
             stage.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();

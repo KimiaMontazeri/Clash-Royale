@@ -218,6 +218,7 @@ public class Troop extends Card {
             else if (y == 15 || y == 16) {
                 if (x <= 8) setLocation(new Point2D(4, y));
                 else        setLocation(new Point2D(13, y));
+                updateTroopInMap(prevLoc);
                 return;
             }
             else if (isEnemy() && y >= 14) {

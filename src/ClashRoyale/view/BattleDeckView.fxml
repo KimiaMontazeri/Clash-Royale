@@ -7,54 +7,54 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClashRoyale.view.BattleDeckCon">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClashRoyale.controller.BattleDeckCon">
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
          <image>
-            <Image url="@../pics/7-74788_m.jpg" />
+            <Image url="@../resources/pics/7-74788_m.jpg" />
          </image>
       </ImageView>
-      <ImageView fx:id="im21" fitHeight="95.0" fitWidth="145.0" layoutX="50.0" layoutY="260.0" onMouseClicked="#card21Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im31" fitHeight="90.0" fitWidth="140.0" layoutX="50.0" layoutY="300.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/archer.png" />
+            <Image url="@../resources/pics/cards/archer.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="im22" fitHeight="95.0" fitWidth="145.0" layoutX="135.0" layoutY="260.0" onMouseClicked="#card22Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im32" fitHeight="90.0" fitWidth="140.0" layoutX="135.0" layoutY="300.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/arrows.png" />
+            <Image url="@../resources/pics/cards/arrows.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="im24" fitHeight="95.0" fitWidth="145.0" layoutX="312.0" layoutY="260.0" onMouseClicked="#card24Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im34" fitHeight="90.0" fitWidth="140.0" layoutX="312.0" layoutY="300.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/baby-dragon.png" />
+            <Image url="@../resources/pics/cards/baby-dragon.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="im13" fitHeight="95.0" fitWidth="145.0" layoutX="223.0" layoutY="153.0" onMouseClicked="#card13Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im23" fitHeight="90.0" fitWidth="140.0" layoutX="223.0" layoutY="200.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/barbarian.png" />
+            <Image url="@../resources/pics/cards/barbarian.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="im23" fitHeight="95.0" fitWidth="145.0" layoutX="223.0" layoutY="260.0" onMouseClicked="#card23Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im33" fitHeight="90.0" fitWidth="140.0" layoutX="223.0" layoutY="300.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/valkyrie.png" />
+            <Image url="@../resources/pics/cards/valkyrie.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="im11" fitHeight="95.0" fitWidth="145.0" layoutX="50.0" layoutY="153.0" onMouseClicked="#card11Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im21" fitHeight="90.0" fitWidth="140.0" layoutX="50.0" layoutY="200.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/giant.png" />
+            <Image url="@../resources/pics/cards/giant.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="im12" fitHeight="95.0" fitWidth="145.0" layoutX="135.0" layoutY="153.0" onMouseClicked="#card12Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im22" fitHeight="90.0" fitWidth="140.0" layoutX="135.0" layoutY="200.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/wizard.png" />
+            <Image url="@../resources/pics/cards/wizard.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="im14" fitHeight="95.0" fitWidth="145.0" layoutX="312.0" layoutY="153.0" onMouseClicked="#card14Pressed" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="im24" fitHeight="90.0" fitWidth="140.0" layoutX="312.0" layoutY="200.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../pics/cards/mini-pekka.png" />
+            <Image url="@../resources/pics/cards/mini-pekka.png" />
          </image>
       </ImageView>
-      <Label layoutX="23.0" layoutY="31.0" text="Battle Deck" textFill="#18b8e9">
+      <Label layoutX="28.0" layoutY="28.0" text="Battle Deck" textFill="#18b8e9">
          <font>
             <Font name="System Bold" size="35.0" />
          </font>
@@ -64,5 +64,25 @@
             <Font size="25.0" />
          </font>
       </Button>
+      <ImageView fx:id="im12" fitHeight="90.0" fitWidth="140.0" layoutX="135.0" layoutY="100.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/pics/cards/inferno-tower-card.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="im13" fitHeight="90.0" fitWidth="140.0" layoutX="223.0" layoutY="100.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/pics/cards/canon-card.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="im11" fitHeight="90.0" fitWidth="140.0" layoutX="50.0" layoutY="100.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/pics/cards/fireball-card.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="im14" fitHeight="90.0" fitWidth="140.0" layoutX="312.0" layoutY="100.0" onMouseClicked="#cardPressed" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/pics/cards/rage.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

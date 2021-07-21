@@ -9,7 +9,6 @@ import ClashRoyale.model.elements.entities.Tower;
 import javafx.geometry.Point2D;
 
 import java.util.HashMap;
-import java.util.Queue;
 import java.util.Stack;
 
 public class GameData {

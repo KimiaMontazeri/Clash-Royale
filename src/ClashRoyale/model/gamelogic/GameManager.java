@@ -3,7 +3,7 @@ package ClashRoyale.model.gamelogic;
 import ClashRoyale.model.GameData;
 import ClashRoyale.model.elements.EntityFactory;
 import ClashRoyale.model.elements.History;
-import ClashRoyale.model.elements.Player;
+import ClashRoyale.model.elements.PlayersArchieve;
 import ClashRoyale.model.elements.entities.Entity;
 import ClashRoyale.model.elements.entities.River;
 import ClashRoyale.model.elements.entities.Tower;
@@ -30,7 +30,8 @@ public class GameManager {
      * It will ask the GameSetup to do the initial stuff before the game (creating a the map, managing the players' cards,...)
      */
     public void start() {
-//        gameData.player = new Player("kimia", "123");
+        PlayersArchieve archive = PlayersArchieve.getInstance();
+        gameData.player = archive.getCurrentPlayer();
         gameSetup.initMap(1, 1);
         gameSetup.setUpTerritories();
         gameSetup.setUpCards();
@@ -162,8 +163,6 @@ public class GameManager {
      */
     public void useCard(int cardNum, int x, int y) {
         Entity.Type chosenCard = gameData.displayedCards.get(cardNum);
-//        if (chosenCard.getCost() < gameData.elixirs) // this if statement will not be true, but has been placed here for more safety
-//            return;
 
         boolean res = addEntity(chosenCard, x, y, false, gameData.player.getLevel()); 
 
@@ -185,7 +184,7 @@ public class GameManager {
         if (gameData.blueCrownNum > gameData.redCrownNum)
             gameData.winnerName = gameData.player.getUsername();
         else if (gameData.blueCrownNum < gameData.redCrownNum)
-            gameData.winnerName = gameData.bot.toString();
+            gameData.winnerName = gameData.bot.getName();
         else {
             int hpSumBlueTeam = gameData.blueKingTower.getHp()
                     + gameData.blueQueenTowerUp.getHp()
@@ -196,7 +195,7 @@ public class GameManager {
             if (hpSumBlueTeam > hpSumRedTeam)
                 gameData.winnerName = gameData.player.getUsername();
             else
-                gameData.winnerName = gameData.bot.toString();
+                gameData.winnerName = gameData.bot.getName();
         }
     }
 

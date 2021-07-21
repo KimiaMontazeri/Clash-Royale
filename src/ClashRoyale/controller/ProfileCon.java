@@ -89,7 +89,7 @@ public class ProfileCon {
                         }
                         else
                             im1.setVisible(false);
-                        return;
+                        break;
                     case 2:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()) {
                             im2.setVisible(true);
@@ -99,7 +99,7 @@ public class ProfileCon {
                         }
                         else
                             im2.setVisible(false);
-                        return;
+                        break;
                     case 3:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()){
                             im3.setVisible(true);
@@ -108,7 +108,7 @@ public class ProfileCon {
                                         cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));}
                         else
                             im3.setVisible(false);
-                        return;
+                        break;
                     case 4:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()){
                             im4.setVisible(true);
@@ -119,7 +119,7 @@ public class ProfileCon {
 
                         else
                             im4.setVisible(false);
-                        return;
+                        break;
                     case 5:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()) {
                             im5.setVisible(true);
@@ -129,7 +129,7 @@ public class ProfileCon {
                         }
                         else
                             im5.setVisible(false);
-                        return;
+                        break;
                     case 6:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()){
                             im6.setVisible(true);
@@ -139,7 +139,7 @@ public class ProfileCon {
                         }
                         else
                             im6.setVisible(false);
-                        return;
+                        break;
                     case 7:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()){
                             im7.setVisible(true);
@@ -148,7 +148,7 @@ public class ProfileCon {
                                         cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));}
                         else
                             im7.setVisible(false);
-                        return;
+                        break;
                     case 8:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()){
                             im8.setVisible(true);
@@ -157,7 +157,7 @@ public class ProfileCon {
                                         cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));}
                         else
                             im8.setVisible(false);
-                        return;
+                        break;
 
 
 

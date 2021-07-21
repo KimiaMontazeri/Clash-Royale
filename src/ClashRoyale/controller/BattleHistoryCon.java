@@ -12,10 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -38,21 +35,15 @@ public class BattleHistoryCon {
 
     @FXML
     private ListView<String> listBox;
+
+
     final ObservableList<String> listItems = FXCollections.observableArrayList("Add Items here");
 
 
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
 
-        playersArchieve.getCurrentPlayer().addHistory(
-                new History((new Player("nene","no")),playersArchieve.getCurrentPlayer().getUsername()));
-        System.out.println(playersArchieve.getCurrentPlayer().getHistories().get(0).toString());
-        playersArchieve.getCurrentPlayer().addHistory(
-                new History((new Player("nana","no")),"nana"));
-        System.out.println(playersArchieve.getCurrentPlayer().getHistories().get(1).toString());
-        playersArchieve.getCurrentPlayer().addHistory(
-                new History((new Player("nono","no")),playersArchieve.getCurrentPlayer().getUsername()));
-        System.out.println(playersArchieve.getCurrentPlayer().getHistories().get(2).toString());
+
         ArrayList<History> arrayList = playersArchieve.getCurrentPlayer().getHistories();
         for (History h : arrayList){
             listItems.add(h.toString());

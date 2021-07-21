@@ -15,7 +15,7 @@
          <top>
             <ImageView fitHeight="159.0" fitWidth="600.0" pickOnBounds="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="@../pics/menuback.jpg" />
+                  <Image url="@../resources/pics/menuback.jpg" />
                </image>
             </ImageView>
          </top>

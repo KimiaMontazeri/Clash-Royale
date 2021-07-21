@@ -1,13 +1,14 @@
 package ClashRoyale.model.elements;
 
-//import ClashRoyale.model.elements.entities.Card;
+import ClashRoyale.model.elements.entities.Card;
+import ClashRoyale.model.elements.entities.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Player implements Serializable {
-    //private ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Entity.Type> cards = new ArrayList<>();
     private ArrayList<History> histories = new ArrayList<>();
     private int level = 1;
     private String username = "";
@@ -35,12 +36,15 @@ public class Player implements Serializable {
         this.password = password;
     }
 
-    /*public ArrayList<Card> getCards() {
+    public ArrayList<Entity.Type> getCards() {
         return cards;
-    }*/
-    /*public void addCard(Card card){
-        cards.add(card);
-    }*/
+    }
+    public void addCard(Entity.Type type){
+        cards.add(type);
+    }
+    public void removeCard(Entity.Type type){
+        cards.remove(type);
+    }
 
    /* public int getCups() {
         return cups;

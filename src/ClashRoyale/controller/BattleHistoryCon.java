@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
-public class BattleHistoryCon {
+public class BattleHistoryCon implements Initializable {
     PlayersArchieve playersArchieve = PlayersArchieve.getInstance();
 
     private Stage stage;
@@ -37,10 +38,10 @@ public class BattleHistoryCon {
     private ListView<String> listBox;
 
 
-    final ObservableList<String> listItems = FXCollections.observableArrayList("Add Items here");
+    final ObservableList<String> listItems = FXCollections.observableArrayList("opponent-date-winner");
 
 
-    @FXML
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
 
 

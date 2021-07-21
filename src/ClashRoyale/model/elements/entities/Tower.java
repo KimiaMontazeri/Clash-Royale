@@ -7,12 +7,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Tower extends Entity {
 
     private int hp, damage;
     private double hitSpeed;
     private final int range;
     private boolean isActivated, isAttacked;
+    private ArrayList<Point2D> gap;
     // isAttacked is mostly used for KingTower (Because KingTower will be activated if it gets attacked, or if one of the queen towers get damaged)
 
     private Timeline attackingTimeline;
@@ -25,7 +29,30 @@ public class Tower extends Entity {
         this.hitSpeed = hitSpeed;
         this.range = range;
         isActivated = isAttacked = false;
+        gap = new ArrayList<>();
+        createGap();
+        images = new HashMap<>();
         loadImages();
+    }
+
+    private void createGap() {
+        int x = (int) getLocation().getX(), y = (int) getLocation().getY();
+        if (gameData.isInsideMap(x - 1, y - 1))
+            gap.add(new Point2D(x - 1, y - 1));
+        if (gameData.isInsideMap(x + 1, y + 1))
+            gap.add(new Point2D(x + 1, y + 1));
+        if (gameData.isInsideMap(x + 1, y - 1))
+            gap.add(new Point2D(x + 1, y - 1));
+        if (gameData.isInsideMap(x - 1, y + 1))
+            gap.add(new Point2D(x - 1, y + 1));
+        if (gameData.isInsideMap(x + 1, y))
+            gap.add(new Point2D(x + 1, y));
+        if (gameData.isInsideMap(x - 1, y))
+            gap.add(new Point2D(x - 1, y));
+        if (gameData.isInsideMap(x, y + 1))
+            gap.add(new Point2D(x, y + 1));
+        if (gameData.isInsideMap(x, y - 1))
+            gap.add(new Point2D(x, y - 1));
     }
 
     private void loadImages() {
@@ -124,6 +151,7 @@ public class Tower extends Entity {
 
     public void attack() {
         if (targetEnemy != null && !targetEnemy.isDead()) {
+            System.out.println(getType() + "is attacking " + targetEnemy.getType());
             targetEnemy.getAttacked(this.damage);
             setAttacking(true);
             return; // won't search for other enemies until the current target dies
@@ -153,31 +181,47 @@ public class Tower extends Entity {
         for (int i = 1; i <= range; i++) {
             x2 = x1 + i;
             y2 = y1;
-            if (x2 < gameData.rowCount) { // avoiding IndexOutOfBound exception
+            if (gameData.isInsideMap(x2, y2)) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
-                if (super.canAttack(entity))
+                if (super.canAttack(entity) && !(entity instanceof Spell))
                     return entity;
             }
 
             x2 = x1 - i;
-            if (x2 >= 0) { // avoiding IndexOutOfBound exception
+            if (gameData.isInsideMap(x2, y2)) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
-                if (super.canAttack(entity))
+                if (super.canAttack(entity) && !(entity instanceof Spell))
                     return entity;
             }
 
             x2 = x1;
             y2 = y1 + i;
-            if (y2 < gameData.colCount) { // avoiding IndexOutOfBound exception
+            if (gameData.isInsideMap(x2, y2)) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
-                if (super.canAttack(entity))
+                if (super.canAttack(entity) && !(entity instanceof Spell))
                     return entity;;
             }
 
             y2 = y1 - i;
-            if (y2 <= 0) { // avoiding IndexOutOfBound exception
+            if (gameData.isInsideMap(x2, y2)) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
-                if (super.canAttack(entity))
+                if (super.canAttack(entity) && !(entity instanceof Spell))
+                    return entity;
+            }
+
+            x2 = x1 + i;
+            y2 = y1 + i;
+            if (gameData.isInsideMap(x2, y2)) {
+                entity = gameData.map[x2][y2];
+                if (super.canAttack(entity) && !(entity instanceof Spell))
+                    return entity;
+            }
+
+            x2 = x1 - i;
+            y2 = y1 - i;
+            if (gameData.isInsideMap(x2, y2)) {
+                entity = gameData.map[x2][y2];
+                if (super.canAttack(entity) && !(entity instanceof Spell))
                     return entity;
             }
         }

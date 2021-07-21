@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Spell extends Card {
 
@@ -25,6 +26,7 @@ public class Spell extends Card {
             this.duration = var;
         else if (type.equals(Type.ARROWS) || type.equals(Type.FIRE))
             this.areaDamage = (int) var;
+        images = new HashMap<>();
         loadImages();
     }
 
@@ -84,11 +86,11 @@ public class Spell extends Card {
         // checks the enemies inside the radius of this spell
         for (int i = x - radius; i <= x + radius; i++) {
             for (int j = y - radius; j <= y + radius; j++) {
-                if ((x >= 0 && x < gameData.rowCount) && (y >= 0 && y < gameData.colCount)) { // avoiding index out of bounds exception
+                if (gameData.isInsideMap(i,j)) { // avoiding index out of bounds exception
                     if (getType().equals(Type.ARROWS) || getType().equals(Type.FIRE))
-                        attack(x,y);
+                        attack(i,j);
                     else
-                        activateRage(x,y);
+                        activateRage(i,j);
                 }
             }
         }
@@ -138,8 +140,8 @@ public class Spell extends Card {
             for (int i = x - radius; i <= x + radius; i++) {
                 for (int j = y - radius; j <= y + radius; j++) {
                     // avoiding index out of bounds exception
-                    if ((x >= 0 && x < gameData.rowCount) && (y >= 0 && y < gameData.colCount)) {
-                        if (gameData.map[i][j].equals(this))
+                    if (gameData.isInsideMap(i,j)) {
+                        if (gameData.map[i][j] != null && gameData.map[i][j].equals(this))
                             gameData.map[i][j] = null;
                     }
                 }

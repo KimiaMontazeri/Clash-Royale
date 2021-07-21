@@ -1,4 +1,4 @@
-package ClashRoyale;
+package ClashRoyale.utils;
 
 import javax.sound.sampled.*;
 import java.io.File;

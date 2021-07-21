@@ -1,6 +1,7 @@
 package ClashRoyale.model.elements.entities;
 
 
+import ClashRoyale.utils.AudioPlayer;
 import javafx.scene.image.Image;
 
 
@@ -51,6 +52,42 @@ public abstract class Card extends Entity {
             default -> {
                 return null;
             }
+        }
+    }
+
+    public static void playSound(Entity.Type cardType) {
+        String path = null;
+        AudioPlayer audioPlayer;
+
+        if (cardType == Type.ARCHER) {
+            path = "src/ClashRoyale/resources/sound-effects/archer_deploy.wav";
+        } else if (cardType == Type.ARROWS) {
+            path = "src/ClashRoyale/resources/sound-effects/arrow_hit.wav";
+        } else if (cardType == Type.BABY_DRAGON) {
+            path = "src/ClashRoyale/resources/sound-effects/babydragon_fire.wav";
+        } else if (cardType == Type.BARBARIANS) {
+            path = "src/ClashRoyale/resources/sound-effects/barbarians_deploy.wav";
+        } else if (cardType == Type.CANNON) {
+            path = "src/ClashRoyale/resources/sound-effects/cannon_deploy.wav";
+        } else if (cardType == Type.FIRE) {
+            path = "src/ClashRoyale/resources/sound-effects/fire_ball_explo.wav";
+        } else if (cardType == Type.GIANT) {
+            path = "src/ClashRoyale/resources/sound-effects/giant_deploy.wav";
+        } else if (cardType == Type.INFERNO_TOWER) {
+            path = "src/ClashRoyale/resources/sound-effects/inferno_deploy.wav";
+        } else if (cardType == Type.MINI_PEKKA) {
+            path = "src/ClashRoyale/resources/sound-effects/mini_pekka_deploy.wav";
+        } else if (cardType == Type.RAGE) {
+            path = "src/ClashRoyale/resources/sound-effects/rage_spell.wav";
+        } else if (cardType == Type.VALKYRIE) {
+            path = "src/ClashRoyale/resources/sound-effects/valkyrie_deploy.wav";
+        } else if (cardType ==Type.WIZARD) {
+            path = "src/ClashRoyale/resources/sound-effects/wiz_deploy_voice.wav";
+        }
+
+        if (path != null) {
+            audioPlayer = new AudioPlayer(path);
+            audioPlayer.play();
         }
     }
 }

@@ -202,5 +202,26 @@ public class GameManager {
     public void endGame() {
         History history = new History(gameData.player.getUsername(), gameData.winnerName);
         gameData.player.addHistory(history);
+
+        resetGameData();
+    }
+
+    public void resetGameData() {
+        for (int row = 0; row < gameData.rowCount; row++) {
+            for (int col = 0; col < gameData.colCount; col++) {
+                Entity entity = gameData.map[row][col];
+                if (entity != null) {
+                    entity.stop();
+                }
+                gameData.map[row][col] = null;
+            }
+        }
+
+        gameData.bot.stopBot();
+        gameData.blueCrownNum = 0;
+        gameData.redCrownNum = 0;
+        gameData.elixirs = 4;
+        gameData.gameOver = false;
+        gameData.winnerName = null;
     }
 }

@@ -1,6 +1,7 @@
 package ClashRoyale.model;
 
 
+import ClashRoyale.utils.AudioPlayer;
 import ClashRoyale.model.elements.Bot;
 import ClashRoyale.model.elements.Player;
 import ClashRoyale.model.elements.Territory;
@@ -44,6 +45,9 @@ public class GameData {
     // territory of each tower :
     public Territory blueQueenUpTerritory, blueQueenDownTerritory, blueKingTerritory;
     public Territory redQueenUpTerritory, redQueenDownTerritory, redKingTerritory;
+
+    // game sound track audio player
+    public AudioPlayer audioPlayer;
 
     private GameData() {
         map = new Entity[rowCount][colCount];

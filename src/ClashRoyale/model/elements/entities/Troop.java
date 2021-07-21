@@ -2,11 +2,8 @@ package ClashRoyale.model.elements.entities;
 
 import ClashRoyale.model.elements.Direction;
 import ClashRoyale.model.elements.TargetType;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
@@ -134,6 +131,7 @@ public class Troop extends Card {
     @Override
     public void activate() {
         startMovingTimeline();
+        Card.playSound(getType());
     }
 
     public void attack() {

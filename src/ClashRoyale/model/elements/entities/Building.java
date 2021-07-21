@@ -112,6 +112,7 @@ public class Building extends Card { // can be an inferno tower or a cannon
     @Override
     public void activate() {
         startAttackingTimeline();
+        Card.playSound(getType());
     }
 
     /**

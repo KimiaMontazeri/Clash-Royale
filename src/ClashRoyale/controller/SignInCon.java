@@ -1,8 +1,11 @@
 package ClashRoyale.controller;
 
+import ClashRoyale.model.GameData;
 import ClashRoyale.model.elements.Player;
 import ClashRoyale.model.elements.PlayersArchieve;
 //import ClashRoyale.model.gamelogic.GameSetup;
+import ClashRoyale.utils.AudioPlayer;
+import ClashRoyale.utils.FileUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,8 +26,8 @@ public class SignInCon {
     private Stage stage;
     private Scene scene;
     private Parent root;
-
-    PlayersArchieve playersArchieve = PlayersArchieve.getInstance();
+    FileUtils fileUtils = new FileUtils();
+    PlayersArchieve playersArchieve = (PlayersArchieve)fileUtils.load("saved");
     @FXML
     private Label SignInError;
 
@@ -39,6 +42,13 @@ public class SignInCon {
 
     @FXML
     private Button signUpButton;
+
+    public void initialize() {
+        String path = "src/ClashRoyale/resources/sound-effects/Clash-Royale-Soundtrack.wav";
+        GameData gameData = GameData.getInstance();
+        gameData.audioPlayer = new AudioPlayer(path);
+        gameData.audioPlayer.play();
+    }
 
     @FXML
     void logIninLogInPressed(ActionEvent event) throws IOException {

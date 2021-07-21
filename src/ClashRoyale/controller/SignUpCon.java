@@ -2,6 +2,7 @@ package ClashRoyale.controller;
 
 import ClashRoyale.model.elements.Player;
 import ClashRoyale.model.elements.PlayersArchieve;
+import ClashRoyale.utils.FileUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,8 +21,9 @@ public class SignUpCon {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    FileUtils fileUtils = new FileUtils();
 
-    PlayersArchieve playersArchieve = PlayersArchieve.getInstance();
+    PlayersArchieve playersArchieve = (PlayersArchieve)fileUtils.load("saved");
     @FXML
     private Label signUpError;
 

@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -255,7 +256,8 @@ public class GameCon implements EventHandler<MouseEvent> {
         try {
             Stage stage = (Stage) nextCard.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/ClashRoyale/view/BattleHistoryView.fxml"));
-            stage.getScene().setRoot(root);
+            Scene scene = new Scene(root, 600, 400);
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }

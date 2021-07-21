@@ -68,6 +68,7 @@ public class Spell extends Card {
         if (getLocation() != null) { // it should be placed on the map otherwise, it cannot be launched
             launch();
             startTimeline();
+            Card.playSound(getType());
         }
     }
 

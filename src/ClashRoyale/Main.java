@@ -1,5 +1,7 @@
 package ClashRoyale;
 
+import ClashRoyale.model.elements.PlayersArchieve;
+import ClashRoyale.utils.FileUtils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,6 +38,11 @@ public class Main extends Application {
         alert.setContentText("Do you want to save before exiting?");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
+            FileUtils fileUtils = new FileUtils();
+
+            PlayersArchieve playersArchieve =PlayersArchieve.getInstance();
+            fileUtils.delete("saved");
+            fileUtils.save("saved",playersArchieve);
             // TODO save EVERYTHING
             stage.close();
         }

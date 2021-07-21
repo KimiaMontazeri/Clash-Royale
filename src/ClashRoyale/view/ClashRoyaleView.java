@@ -2,7 +2,6 @@ package ClashRoyale.view;
 
 import ClashRoyale.model.GameData;
 import ClashRoyale.model.elements.entities.Entity;
-import ClashRoyale.model.elements.entities.Tower;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +15,7 @@ public class ClashRoyaleView extends Group {
     private ImageView[][] tiles;
 
     // tiles
-    private final Image tileDown, tileLeft, tileLeftCornerDown, tileLeftCornerUp, tileRight, tileRightCornerDown, tileRightCornerUp, tileUp, tileWater;
+    private final Image tileCenter, tileDown, tileLeft, tileLeftCornerDown, tileLeftCornerUp, tileRight, tileRightCornerDown, tileRightCornerUp, tileUp;
 
     public ClashRoyaleView() {
         tileDown = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_down.png"));
@@ -27,7 +26,7 @@ public class ClashRoyaleView extends Group {
         tileRightCornerDown = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_right_corner_down.png"));
         tileRightCornerUp = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_right_corner_up.png"));
         tileUp = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_up.png"));
-        tileWater = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_water.png"));
+        tileCenter = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_center.png"));
     }
 
     public ImageView[][] getMap() {
@@ -72,7 +71,7 @@ public class ClashRoyaleView extends Group {
         for (int row = 0; row < gameData.rowCount; row++) {
             for (int col = 0; col < gameData.colCount; col++) {
                 // default
-                this.tiles[row][col].setImage(null);
+                this.tiles[row][col].setImage(tileCenter);
                 // rendering the border of the map
                 if (col == 0)
                     this.tiles[row][col].setImage(tileLeft);
@@ -94,14 +93,6 @@ public class ClashRoyaleView extends Group {
 
                 // rendering the image of the entities on the map
                 if (map[row][col] != null) {
-                    // change the size if necessary
-//                    if (map[row][col].getType() == Entity.Type.KING_TOWER) {
-//                        this.tiles[row][col].setFitWidth(CELL_WIDTH * 3);
-//                        this.tiles[row][col].setFitHeight(CELL_HEIGHT * 3);
-//                    } else if (map[row][col].getType() == Entity.Type.QUEEN_TOWER) {
-//                        this.tiles[row][col].setFitWidth(CELL_WIDTH * 2);
-//                        this.tiles[row][col].setFitHeight(CELL_HEIGHT * 2);
-//                    }
                     // set the image
                     this.tiles[row][col].setImage(map[row][col].getCurrentImage());
                 }

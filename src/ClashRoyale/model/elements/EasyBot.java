@@ -43,5 +43,9 @@ public class EasyBot extends Bot {
         } while (gameData.isInsideMap(x, y) && gameData.map[x][y] == null);
     }
 
+    public String getName() {
+        return "EASY BOT";
+    }
+
 
 }

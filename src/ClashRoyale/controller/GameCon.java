@@ -10,12 +10,16 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
 
 
 public class GameCon implements EventHandler<MouseEvent> {
@@ -24,6 +28,7 @@ public class GameCon implements EventHandler<MouseEvent> {
     @FXML private ImageView card1, card2, card3, card4, nextCard;
     @FXML private Label timer, blueCrowns, redCrowns, elixirNum;
     @FXML private ClashRoyaleView clashRoyaleView;
+
     private ImageView selectedCard;
     private final GameManager gameManager;
     private Timeline gameTimer, elixirTimer, gameRenderingTimer;
@@ -32,42 +37,19 @@ public class GameCon implements EventHandler<MouseEvent> {
         gameManager = new GameManager();
     }
 
-    public Timeline getGameTimer() {
-        return gameTimer;
-    }
-
-    public Timeline getElixirTimer() {
-        return elixirTimer;
-    }
-
-    public Timeline getGameRenderingTimer() {
-        return gameRenderingTimer;
-    }
-
     @FXML
     public void initialize() {
         // init game model
         gameManager.start();
 
         // init game view
-        initCards();
         initTiles();
+        updateCardView();
+
+        // start timelines
         startGame();
         startGameTimer();
         startElixirTimer(2);
-    }
-
-    public void initCards() {
-        card1.setImage(new Image(getClass().getResourceAsStream("/ClashRoyale/resources/arrows/arrows.png")));
-        card2.setImage(new Image(getClass().getResourceAsStream("/ClashRoyale/resources/buildings/canon-card.png")));
-        card3.setImage(new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer.png")));
-        card4.setImage(new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/wizard/wizard.png")));
-        nextCard.setImage(new Image(getClass().getResourceAsStream("/ClashRoyale/resources/fireball/fireball-card.png")));
-
-        setMouseHoverOnCard(card1, true);
-        setMouseHoverOnCard(card2, false);
-        setMouseHoverOnCard(card3, true);
-        setMouseHoverOnCard(card4, false);
     }
 
     public void initTiles() {
@@ -110,7 +92,7 @@ public class GameCon implements EventHandler<MouseEvent> {
         this.elixirTimer = new Timeline(
                 new KeyFrame(Duration.seconds(duration), event -> {
                     int num = gameManager.getGameData().elixirs;
-                    if (num <= 9) {
+                    if (num <= 10) {
                         elixirNum.setText(Integer.toString(num));
                         gameManager.getGameData().elixirs++;
                         updateCardView();
@@ -258,5 +240,20 @@ public class GameCon implements EventHandler<MouseEvent> {
         this.elixirTimer.stop();
         this.gameRenderingTimer.stop();
         gameManager.findWinner();
+        gameManager.endGame();
+        switchToBattleHistory();
+    }
+
+    /**
+     * loads the battle history fxml file
+     */
+    private void switchToBattleHistory() {
+        try {
+            Stage stage = (Stage) nextCard.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/view/BattleHistoryView.fxml"));
+            stage.getScene().setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -52,6 +52,8 @@ public class MediumBot extends Bot {
                 // places a troop in front of an enemy
                 x = (int) loc.getX();
                 y = (int) loc.getY() + 3;
+                if (y > 28)
+                    y = (int) loc.getY() - 3;
             } else {
                 // places a troop closer to the river
                 x = getRandomGenerator().nextInt(11) + 3;
@@ -155,5 +157,9 @@ public class MediumBot extends Bot {
             }
         }
         return null;
+    }
+
+    public String getName() {
+        return "MEDIUM BOT";
     }
 }

@@ -80,7 +80,7 @@ public class GameData {
             if (redQueenDownTerritory != null && redQueenDownTerritory.isActive() && redQueenDownTerritory.isInTerritory(x,y))
                 return true;
         }
-        return true;
+        return false;
     }
 
     public boolean isInsideMap(int x, int y) {

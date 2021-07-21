@@ -16,4 +16,7 @@ public class River extends Entity {
 
     @Override
     public void activate() {}
+
+    @Override
+    public void stop() {}
 }

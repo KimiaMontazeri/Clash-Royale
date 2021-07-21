@@ -7,6 +7,8 @@ import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
+import java.util.HashMap;
+
 public class Building extends Card { // can be an inferno tower or a cannon
 
     private int hp;
@@ -30,6 +32,7 @@ public class Building extends Card { // can be an inferno tower or a cannon
         this.targetType = targetType;
         this.range = range;
         this.lifetime = lifetime;
+        images = new HashMap<>();
         loadImages();
     }
 
@@ -139,6 +142,7 @@ public class Building extends Card { // can be an inferno tower or a cannon
         if (targetEnemy != null && !targetEnemy.isDead()) {
             if (getType() == Type.INFERNO_TOWER && damage <= maxDamage)
                 this.damage += 15; // increment the damage of inferno tower
+            System.out.println(getType() + " is attacking " + targetEnemy.getType());
             targetEnemy.getAttacked(this.damage);
             setAttacking(true);
 //            return;
@@ -180,7 +184,7 @@ public class Building extends Card { // can be an inferno tower or a cannon
             }
 
             y2 = y1 - i; // checks left
-            if (y2 <= 0) { // avoiding IndexOutOfBound exception
+            if (y2 >= 0) { // avoiding IndexOutOfBound exception
                 entity = gameData.map[x2][y2];
                 if (super.isTargetType(entity, targetType) && super.canAttack(entity))
                     return entity;

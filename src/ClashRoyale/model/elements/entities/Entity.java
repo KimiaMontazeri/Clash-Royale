@@ -85,6 +85,8 @@ public abstract class Entity {
 
     public abstract void activate(); // activates this entity
 
+    public abstract void stop(); // stops this entity
+
     // the 3 methods below are fully implemented in most of the subclasses
     public void boost(double rate) {}
 
@@ -94,6 +96,8 @@ public abstract class Entity {
 
     // checks if this entity is an enemy or not
     public boolean canAttack(Entity enemy) {
+        if (enemy == null)
+            return false;
         return (enemy.isEnemy() && !isEnemy()) ||
                 (!enemy.isEnemy() && isEnemy());
     }

@@ -65,6 +65,14 @@ public class ProfileCon {
     private Label usernameProfile;
     @FXML
     private void initialize() {
+        im1.setVisible(false);
+        im2.setVisible(false);
+        im3.setVisible(false);
+        im4.setVisible(false);
+        im5.setVisible(false);
+        im6.setVisible(false);
+        im7.setVisible(false);
+        im8.setVisible(false);
         mappingHashmap();
         usernameProfile.setText(playersArchieve.getCurrentPlayer().getUsername());
         playerLevelProfile.setText(playersArchieve.getCurrentPlayer().getLevelstr());
@@ -77,7 +85,7 @@ public class ProfileCon {
                             im1.setVisible(true);
                             im1.setImage(new Image(getClass().getResourceAsStream(
                                     "/ClashRoyale/resources/pics/cards/" +
-                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));
+                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));
                         }
                         else
                             im1.setVisible(false);
@@ -87,7 +95,7 @@ public class ProfileCon {
                             im2.setVisible(true);
                             im2.setImage(new Image(getClass().getResourceAsStream(
                                     "/ClashRoyale/resources/pics/cards/" +
-                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));
+                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));
                         }
                         else
                             im2.setVisible(false);
@@ -97,7 +105,7 @@ public class ProfileCon {
                             im3.setVisible(true);
                         im3.setImage(new Image(getClass().getResourceAsStream(
                                 "/ClashRoyale/resources/pics/cards/"+
-                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));}
+                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));}
                         else
                             im3.setVisible(false);
                         return;
@@ -106,7 +114,7 @@ public class ProfileCon {
                             im4.setVisible(true);
                             im4.setImage(new Image(getClass().getResourceAsStream(
                                     "/ClashRoyale/resources/pics/cards/"+
-                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));
+                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));
                         }
 
                         else
@@ -117,7 +125,7 @@ public class ProfileCon {
                             im5.setVisible(true);
                             im5.setImage(new Image(getClass().getResourceAsStream(
                                     "/ClashRoyale/resources/pics/cards/" +
-                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));
+                                            cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));
                         }
                         else
                             im5.setVisible(false);
@@ -127,7 +135,7 @@ public class ProfileCon {
                             im6.setVisible(true);
                         im6.setImage(new Image(getClass().getResourceAsStream(
                                 "/ClashRoyale/resources/pics/cards/"+
-                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));
+                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));
                         }
                         else
                             im6.setVisible(false);
@@ -137,7 +145,7 @@ public class ProfileCon {
                             im7.setVisible(true);
                         im7.setImage(new Image(getClass().getResourceAsStream(
                                 "/ClashRoyale/resources/pics/cards/"+
-                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));}
+                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));}
                         else
                             im7.setVisible(false);
                         return;
@@ -146,7 +154,7 @@ public class ProfileCon {
                             im8.setVisible(true);
                         im8.setImage(new Image(getClass().getResourceAsStream(
                                 "/ClashRoyale/resources/pics/cards/"+
-                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));}
+                                        cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p-1)))));}
                         else
                             im8.setVisible(false);
                         return;

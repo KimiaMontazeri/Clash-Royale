@@ -143,7 +143,7 @@ public class ProfileCon {
                         return;
                     case 8:
                         if(p<=playersArchieve.getCurrentPlayer().getCards().size()){
-                            im8.setVisible(true)
+                            im8.setVisible(true);
                         im8.setImage(new Image(getClass().getResourceAsStream(
                                 "/ClashRoyale/resources/pics/cards/"+
                                         cardsImageMap.get(playersArchieve.getCurrentPlayer().getCards().get(p)))));}

@@ -42,9 +42,9 @@ public class Player implements Serializable {
         cards.add(card);
     }*/
 
-    public int getCups() {
+   /* public int getCups() {
         return cups;
-    }
+    }*/
 
     public int getLevel() {
         return level;
@@ -57,6 +57,9 @@ public class Player implements Serializable {
 
     public ArrayList<History> getHistories() {
         return histories;
+    }
+    public void addHistory(History history){
+        histories.add(history);
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PlayersArchieve implements Serializable {   ////singleton
+
     private static PlayersArchieve instance = null;
     private Player currentPlayer=null;
     public static PlayersArchieve getInstance()

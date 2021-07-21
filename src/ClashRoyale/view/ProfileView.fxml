@@ -24,42 +24,42 @@
                 <Image url="@../resources/pics/kissclipart-clash-royale-trophy-png-clipart-clash-royale-clash-3cb22dc2acf3c811.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im11" fitHeight="100.0" fitWidth="90.0" layoutX="201.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im1" fitHeight="100.0" fitWidth="90.0" layoutX="201.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/archer.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im12" fitHeight="100.0" fitWidth="90.0" layoutX="290.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im2" fitHeight="100.0" fitWidth="90.0" layoutX="290.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/arrows.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im22" fitHeight="100.0" fitWidth="90.0" layoutX="290.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im6" fitHeight="100.0" fitWidth="90.0" layoutX="290.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/canon-card.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im13" fitHeight="100.0" fitWidth="90.0" layoutX="386.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im3" fitHeight="100.0" fitWidth="90.0" layoutX="386.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/barbarian.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im21" fitHeight="100.0" fitWidth="90.0" layoutX="201.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im5" fitHeight="100.0" fitWidth="90.0" layoutX="201.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/baby-dragon.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im23" fitHeight="100.0" fitWidth="90.0" layoutX="386.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im7" fitHeight="100.0" fitWidth="90.0" layoutX="386.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/fireball-card.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im14" fitHeight="100.0" fitWidth="90.0" layoutX="476.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im4" fitHeight="100.0" fitWidth="90.0" layoutX="476.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/giant.png" />
             </image>
         </ImageView>
-        <ImageView fx:id="im24" fitHeight="100.0" fitWidth="90.0" layoutX="476.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="im8" fitHeight="100.0" fitWidth="90.0" layoutX="476.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../resources/pics/cards/inferno-tower-card.png" />
             </image>

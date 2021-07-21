@@ -1,7 +1,10 @@
 package ClashRoyale.model.elements.entities;
 
 
+import ClashRoyale.model.elements.Player;
 import javafx.scene.image.Image;
+
+import java.util.Objects;
 
 public abstract class Card extends Entity {
     private Image cardImage;

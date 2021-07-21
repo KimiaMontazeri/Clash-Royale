@@ -20,11 +20,11 @@
             <Font name="System Bold" size="30.0" />
          </font>
       </Label>
-      <Button layoutX="462.0" layoutY="30.0" mnemonicParsing="false" text="Menu">
+      <Button layoutX="462.0" layoutY="30.0" mnemonicParsing="false" onAction="#menuInBattleHistory" text="Menu">
          <font>
             <Font name="System Bold" size="28.0" />
          </font>
       </Button>
-      <ListView layoutX="173.0" layoutY="59.0" prefHeight="244.0" prefWidth="275.0" />
+      <ListView fx:id="listBox" layoutX="173.0" layoutY="59.0" prefHeight="244.0" prefWidth="275.0" />
    </children>
 </AnchorPane>

@@ -20,7 +20,7 @@ public class History {
 
     @Override
     public String toString() {
-        return "oponent: " + opponent + "|" +
+        return "oponent: " + opponent.getUsername() + "|" +
                 "date: " + dateStr + "|" +
                 "winner" + winner;
     }

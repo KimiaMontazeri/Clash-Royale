@@ -1,5 +1,7 @@
 package ClashRoyale.controller;
 import ClashRoyale.model.elements.PlayersArchieve;
+import ClashRoyale.model.elements.entities.Card;
+import ClashRoyale.model.elements.entities.Entity;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -72,17 +74,17 @@ public class BattleDeckCon {
         ImageView cardImageView = (ImageView)event.getSource();
         switch (cardImageView.getId()) {
             case "im11":
-                if (se11==true){
-                    se11=false;
+                if (se11==true) {
+                    se11 = false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.FIRE);
                 }
                 else if (numOfSelected<8){
                     se11=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.FIRE);
                 }
                 return;
             case "im12":
@@ -90,13 +92,13 @@ public class BattleDeckCon {
                     sel2=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.INFERNO_TOWER);
                 }
                 else if (numOfSelected<8){
                     sel2=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.INFERNO_TOWER);
                 }
 
                 return;
@@ -105,13 +107,14 @@ public class BattleDeckCon {
                     se13=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.CANNON);
                 }
                 else if (numOfSelected<8){
                     se13=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.CANNON);
+
                 }
 
                 return;
@@ -120,13 +123,14 @@ public class BattleDeckCon {
                     sel4=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.RAGE);
+
                 }
                 else if (numOfSelected<8){
                     sel4=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.RAGE);
                 }
 
                 return;
@@ -135,13 +139,14 @@ public class BattleDeckCon {
                     se21=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.GIANT);
                 }
+
                 else if (numOfSelected<8){
                     se21=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.GIANT);
                 }
 
                 return;
@@ -150,13 +155,13 @@ public class BattleDeckCon {
                     se22=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.WIZARD);
                 }
                 else if (numOfSelected<8){
                     se22=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.WIZARD);
                 }
 
                 return;
@@ -165,13 +170,13 @@ public class BattleDeckCon {
                     se23=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.BARBARIANS);
                 }
                 else if (numOfSelected<8){
                     se23=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.BARBARIANS);
                 }
 
                 return;
@@ -180,13 +185,13 @@ public class BattleDeckCon {
                     se24=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.MINI_PEKKA);
                 }
                 else if (numOfSelected<8){
                     se24=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.MINI_PEKKA);
                 }
 
                 return;
@@ -195,13 +200,13 @@ public class BattleDeckCon {
                     se31=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.ARCHER);
                 }
                 else if (numOfSelected<8){
                     se31=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.ARCHER);
                 }
 
                 return;
@@ -210,13 +215,13 @@ public class BattleDeckCon {
                     se32=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.ARROWS);
                 }
                 else if (numOfSelected<8){
                     se32=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.ARROWS);
                 }
 
                 return;
@@ -225,13 +230,13 @@ public class BattleDeckCon {
                     se33=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.VALKYRIE);
                 }
                 else if (numOfSelected<8){
                     se33=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.VALKYRIE);
                 }
 
                 return;
@@ -240,13 +245,13 @@ public class BattleDeckCon {
                     se34=false;
                     numOfSelected--;
                     cardImageView.setOpacity(0.2);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().removeCard(Entity.Type.BABY_DRAGON);
                 }
                 else if (numOfSelected<8){
                     se34=true;
                     numOfSelected++;
                     cardImageView.setOpacity(1);
-                    // playersArchieve.getCurrentPlayer().
+                    playersArchieve.getCurrentPlayer().addCard(Entity.Type.BABY_DRAGON);
                 }
 
                 return;

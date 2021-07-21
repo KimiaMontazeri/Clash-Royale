@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClashRoyale.view.TrainingCampView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ClashRoyale.controller.TrainingCampCon">
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
          <image>
@@ -19,12 +19,12 @@
             <Font name="System Bold" size="42.0" />
          </font>
       </Label>
-      <Button fx:id="mediumbuttonInBattleDeck" layoutX="240.0" layoutY="193.0" mnemonicParsing="false" onAction="#mediumInTrainingCamp" prefHeight="71.0" prefWidth="145.0" text="Medium">
+      <Button fx:id="mediumbuttonInTrainingCamp" layoutX="240.0" layoutY="193.0" mnemonicParsing="false" onAction="#mediumInTrainingCamp" prefHeight="71.0" prefWidth="145.0" text="Medium">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="easybuttonInBattleDeck" layoutX="240.0" layoutY="115.0" mnemonicParsing="false" onAction="#easyInTrainingCamp" prefHeight="71.0" prefWidth="145.0" text="Easy">
+      <Button fx:id="easybuttonInTrainingCamp" layoutX="240.0" layoutY="115.0" mnemonicParsing="false" onAction="#easyInTrainingCamp" prefHeight="71.0" prefWidth="145.0" text="Easy">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>

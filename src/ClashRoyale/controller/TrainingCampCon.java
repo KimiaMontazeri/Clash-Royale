@@ -1,5 +1,6 @@
 package ClashRoyale.controller;
 
+import com.sun.prism.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,27 +18,34 @@ public class TrainingCampCon {
     private Parent root;
 
 
-    @FXML
-    private Button mediumbuttonInBattleDeck;
-
-    @FXML
-    private Button easybuttonInBattleDeck;
 
     @FXML
     private Button menubuttonInTrainingCamp;
 
     @FXML
-    void easyInTrainingCamp(ActionEvent event) {
+    private Button easybuttonInTrainingCamp;
+
+    @FXML
+    private Button mediumbuttonInTrainingCamp;
+
+    @FXML
+    void easyInTrainingCamp(ActionEvent event) throws IOException{
+        easybuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
+        //changeScene(event, "../View/GameCon.fxml");
 
     }
 
     @FXML
-    void mediumInTrainingCamp(ActionEvent event) {
+    void mediumInTrainingCamp(ActionEvent event) throws IOException{
+        mediumbuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
+
+        //changeScene(event, "../View/GameCon.fxml");
 
     }
 
     @FXML
-    void menuInTrainingCamp(ActionEvent event) {
+    void menuInTrainingCamp(ActionEvent event) throws IOException {
+        changeScene(event, "../View/MenuView.fxml");
 
     }
     public void changeScene(ActionEvent event,String address) throws IOException {

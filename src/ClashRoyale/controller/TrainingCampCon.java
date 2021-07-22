@@ -49,7 +49,7 @@ public class TrainingCampCon {
     void easyInTrainingCamp(ActionEvent event) throws IOException {
         //easybuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
         if (playersArchieve.getCurrentPlayer().getCards().size() == 8) {
-            gameData.setBot(new EasyBot(gameData.player.getLevel()));
+            gameData.setBot(new EasyBot(playersArchieve.getCurrentPlayer().getLevel()));
             changeScene(event, "/ClashRoyale/view/GameView.fxmll");
         } else
             ErrorLabel.setText("Cards Not Selected");
@@ -65,7 +65,7 @@ public class TrainingCampCon {
     void mediumInTrainingCamp(ActionEvent event) throws IOException {
         // mediumbuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
         if (playersArchieve.getCurrentPlayer().getCards().size() == 8) {
-            gameData.setBot(new MediumBot(gameData.player.getLevel()));
+            gameData.setBot(new MediumBot(playersArchieve.getCurrentPlayer().getLevel()));
             changeScene(event, "/ClashRoyale/view/GameView.fxml");
         } else
             ErrorLabel.setText("Cards Not Selected");

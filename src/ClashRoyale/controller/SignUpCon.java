@@ -2,7 +2,7 @@ package ClashRoyale.controller;
 
 import ClashRoyale.model.elements.Player;
 import ClashRoyale.model.elements.PlayersArchieve;
-import ClashRoyale.utils.FileUtils;
+import ClashRoyale.utils.FileUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,13 +17,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controller class for the signup menu
+ * @author NEGAR
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class SignUpCon {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    FileUtils fileUtils = new FileUtils();
+    private PlayersArchieve playersArchieve;
 
-    PlayersArchieve playersArchieve = (PlayersArchieve)fileUtils.load("saved");
     @FXML
     private Label signUpError;
 
@@ -42,12 +47,33 @@ public class SignUpCon {
     @FXML
     private PasswordField signUpPassword2;
 
+    /**
+     * initializes the whole scene and all the nodes inside
+     */
+    public void initialize() {
+
+        // load the database
+        FileUtil fileUtil = new FileUtil();
+        PlayersArchieve.setInstance(fileUtil.readFromFile());
+        playersArchieve = PlayersArchieve.getInstance();
+    }
+
+    /**
+     * handling login button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void logInInSignUpPressed(ActionEvent event) throws IOException {
         changeScene(event,"../View/SignInView.fxml");
 
     }
 
+    /**
+     * handling signup button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void signUpInSignUpPressed(ActionEvent event) throws IOException {
         if (signUpUsername.getText().equals("") ||
@@ -63,12 +89,19 @@ public class SignUpCon {
 
 
         } else {
-            playersArchieve.getPlayersArchieve().add(new Player(signUpUsername.getText(),signUpPassword1.getText()));
+            playersArchieve.getPlayersArchieve().add(new Player(signUpUsername.getText(),signUpPassword1.getText(), 1, 300));
             playersArchieve.setCurrentPlayer(playersArchieve.getPlayerByUserName(signUpUsername.getText()));
             changeScene(event,"../View/MenuView.fxml");
         }
 
     }
+
+    /**
+     * Changes the scene to the given address
+     * @param event event
+     * @param address fxml file address
+     * @throws IOException I/O exception may occur in file loading
+     */
     public void changeScene(ActionEvent event,String address) throws IOException {
         root = FXMLLoader.load(getClass().getResource(address));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();

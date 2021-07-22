@@ -1,11 +1,9 @@
 package ClashRoyale.controller;
 
 import ClashRoyale.model.GameData;
-import ClashRoyale.model.elements.Player;
 import ClashRoyale.model.elements.PlayersArchieve;
-//import ClashRoyale.model.gamelogic.GameSetup;
 import ClashRoyale.utils.AudioPlayer;
-import ClashRoyale.utils.FileUtils;
+import ClashRoyale.utils.FileUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,15 +17,16 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+/**
+ * Controller class for sing in menu
+ */
 public class SignInCon {
     private Stage stage;
     private Scene scene;
     private Parent root;
-    FileUtils fileUtils = new FileUtils();
-    PlayersArchieve playersArchieve = (PlayersArchieve)fileUtils.load("saved");
+    private PlayersArchieve playersArchieve;
+
     @FXML
     private Label SignInError;
 
@@ -43,13 +42,30 @@ public class SignInCon {
     @FXML
     private Button signUpButton;
 
+    /**
+     * initializes the whole scene and all the nodes inside
+     */
     public void initialize() {
+
+        // load the database
+        FileUtil fileUtil = new FileUtil();
+        PlayersArchieve.setInstance(fileUtil.readFromFile());
+        playersArchieve = PlayersArchieve.getInstance();
+
+        // play the game's soundtrack
         String path = "src/ClashRoyale/resources/sound-effects/Clash-Royale-Soundtrack.wav";
         GameData gameData = GameData.getInstance();
-        gameData.audioPlayer = new AudioPlayer(path);
-        gameData.audioPlayer.play();
+        if (gameData.audioPlayer == null) {
+            gameData.audioPlayer = new AudioPlayer(path);
+            gameData.audioPlayer.play();
+        }
     }
 
+    /**
+     * handling login button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void logIninLogInPressed(ActionEvent event) throws IOException {
 
@@ -70,11 +86,22 @@ public class SignInCon {
         }
     }
 
+    /**
+     * handling signup button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void signUpinLogInPressed(ActionEvent event) throws IOException {
         changeScene(event, "../View/SignUpView.fxml");
     }
 
+    /**
+     * Changes the scene to the given address
+     * @param event event
+     * @param address fxml file address
+     * @throws IOException I/O exception may occur in file loading
+     */
     public void changeScene(ActionEvent event, String address) throws IOException {
         root = FXMLLoader.load(getClass().getResource(address));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -6,13 +6,23 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-
+/**
+ * Game's easy bot
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class EasyBot extends Bot {
-
-    public EasyBot() {
-        super(1);
+    /**
+     * Create a bot with level 1
+     */
+    public EasyBot(int level) {
+        super(level);
     }
 
+    /**
+     * Starts this bot
+     */
     @Override
     public void start() {
         this.timeline = new Timeline(
@@ -43,6 +53,9 @@ public class EasyBot extends Bot {
         } while (gameData.isInsideMap(x, y) && gameData.map[x][y] == null);
     }
 
+    /**
+     * @return bot's name
+     */
     public String getName() {
         return "EASY BOT";
     }

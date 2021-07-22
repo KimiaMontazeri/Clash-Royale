@@ -12,6 +12,12 @@ import javafx.geometry.Point2D;
 import java.util.HashMap;
 import java.util.Stack;
 
+/**
+ * All the game's data will be save here and can be accessed by any other class
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class GameData {
 
     private static GameData instance = null;
@@ -49,23 +55,38 @@ public class GameData {
     // game sound track audio player
     public AudioPlayer audioPlayer;
 
+    /**
+     * Constructs a GameData
+     */
     private GameData() {
         map = new Entity[rowCount][colCount];
         displayedCards = new HashMap<>(4);
         upcomingCards = new Stack<>();
     }
 
-    // using singleton pattern for this class so that we have only 1 GameData in the whole game
+    /**
+     * @return instance of this class (singleton)
+     */
     public static GameData getInstance() {
         if (instance == null)
             instance = new GameData();
         return instance;
     }
 
+    /**
+     * @param bot game's bot
+     */
     public void setBot(Bot bot) {
         this.bot = bot;
     }
 
+    /**
+     * Cheks if this coordinate is in the territory of enemy's towers or not
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param isEnemy is enemy or not
+     * @return true if this x,y coordinate is inside a territory
+     */
     public boolean isInTerritory(int x, int y, boolean isEnemy) {
         if (isEnemy) {
             // != null is written to avoid NullPointerException
@@ -86,6 +107,12 @@ public class GameData {
         return false;
     }
 
+    /**
+     * Checks if this x,y coordinate is inside the game's map
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return true if the x,y coordinate is in the map
+     */
     public boolean isInsideMap(int x, int y) {
         return x >= 0 && x < rowCount && y >= 0 && y < colCount;
     }

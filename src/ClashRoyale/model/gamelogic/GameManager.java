@@ -3,6 +3,7 @@ package ClashRoyale.model.gamelogic;
 import ClashRoyale.model.GameData;
 import ClashRoyale.model.elements.EntityFactory;
 import ClashRoyale.model.elements.History;
+import ClashRoyale.model.elements.Player;
 import ClashRoyale.model.elements.PlayersArchieve;
 import ClashRoyale.model.elements.entities.Entity;
 import ClashRoyale.model.elements.entities.River;
@@ -11,16 +12,28 @@ import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
 
+/**
+ * This class will manage the game
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class GameManager {
 
     private final GameData gameData;
     private final GameSetup gameSetup;
 
+    /**
+     * Constructs a game manager
+     */
     public GameManager() {
         gameData = GameData.getInstance();
         gameSetup = new GameSetup();
     }
 
+    /**
+     * @return game data
+     */
     public GameData getGameData() {
         return gameData;
     }
@@ -28,11 +41,12 @@ public class GameManager {
     /**
      * This method is called by GameCon at the start of each game
      * It will ask the GameSetup to do the initial stuff before the game (creating a the map, managing the players' cards,...)
+     * It will also start the bot
      */
     public void start() {
         PlayersArchieve archive = PlayersArchieve.getInstance();
         gameData.player = archive.getCurrentPlayer();
-        gameSetup.initMap(1, 1);
+        gameSetup.initMap(gameData.player.getLevel(), gameData.bot.getLevel());
         gameSetup.setUpTerritories();
         gameSetup.setUpCards();
         gameData.blueQueenTowerUp.activate();
@@ -113,6 +127,9 @@ public class GameManager {
         removeDeadEntities();
     }
 
+    /**
+     * Updates the map
+     */
     public void updateMap() {
         gameData.bridgeUp = new Point2D(4, 15);
         gameData.bridgeDown = new Point2D(13, 15);
@@ -142,6 +159,9 @@ public class GameManager {
         }
     }
 
+    /**
+     * Removes dead entities from the map
+     */
     public void removeDeadEntities() {
         for (int i = 0; i < gameData.rowCount; i++) {
             for (int j = 0; j < gameData.colCount; j++) {
@@ -199,13 +219,48 @@ public class GameManager {
         }
     }
 
+    /**
+     * Ends the game (prepare the game for ending)
+     * Adds a new game history to the histories of the player
+     */
     public void endGame() {
         History history = new History(gameData.player.getUsername(), gameData.winnerName);
         gameData.player.addHistory(history);
 
+        giveXpToPlayers();
         resetGameData();
     }
 
+    /**
+     * Gives xp to the player and updates its level if necessary
+     */
+    public void giveXpToPlayers() {
+        Player player = gameData.player;
+
+        if (gameData.winnerName.equals(player.getUsername()))
+            player.addXp(200);
+        else
+            player.addXp(70);
+
+        if (player.getLevel() == 1 && player.getXp() == 500) {
+            player.setXp(Math.abs(player.getXp() - 500));
+            player.setLevel(2);
+        } else if (player.getLevel() == 2 && player.getXp() == 900) {
+            player.setXp(Math.abs(player.getXp() - 900));
+            player.setLevel(3);
+        } else if (player.getLevel() == 3 && player.getXp() == 1700) {
+            player.setXp(Math.abs(player.getXp() - 1700));
+            player.setLevel(4);
+        } else if (player.getLevel() == 4 && player.getXp() == 2500) {
+            player.setXp(Math.abs(player.getXp() - 2500));
+            player.setLevel(5);
+        }
+
+    }
+
+    /**
+     * Resets GameData to its initial state
+     */
     public void resetGameData() {
         for (int row = 0; row < gameData.rowCount; row++) {
             for (int col = 0; col < gameData.colCount; col++) {

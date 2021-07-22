@@ -1,6 +1,5 @@
 package ClashRoyale.model.elements;
 
-import ClashRoyale.model.elements.entities.Card;
 import ClashRoyale.model.elements.entities.Entity;
 
 import java.io.Serializable;
@@ -10,14 +9,16 @@ import java.util.Objects;
 public class Player implements Serializable {
     private ArrayList<Entity.Type> cards = new ArrayList<>();
     private ArrayList<History> histories = new ArrayList<>();
-    private int level = 1;
-    private String username = "";
-    private String password = "";
-    private int cups = 0;
+    private int level;
+    private int xp;
+    private String username;
+    private String password;
 
-    public Player(String username, String password) {
+    public Player(String username, String password, int level, int xp) {
         this.username = username;
         this.password = password;
+        this.level = level;
+        this.xp = xp;
     }
 
     public String getUsername() {
@@ -36,23 +37,47 @@ public class Player implements Serializable {
         this.password = password;
     }
 
+    public void setCards(ArrayList<Entity.Type> cards) {
+        this.cards = cards;
+    }
+
+    public void setHistories(ArrayList<History> histories) {
+        this.histories = histories;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    public void addXp(int xpToAdd) {
+        this.xp += xpToAdd;
+    }
+
+    public int getXp() {
+        return xp;
+    }
+
     public ArrayList<Entity.Type> getCards() {
         return cards;
     }
+
     public void addCard(Entity.Type type){
         cards.add(type);
     }
+
     public void removeCard(Entity.Type type){
         cards.remove(type);
     }
 
-   /* public int getCups() {
-        return cups;
-    }*/
 
     public int getLevel() {
         return level;
     }
+
     public String  getLevelstr() {
         Integer lev = level;
         return lev.toString();
@@ -62,6 +87,7 @@ public class Player implements Serializable {
     public ArrayList<History> getHistories() {
         return histories;
     }
+
     public void addHistory(History history){
         histories.add(history);
     }

@@ -11,9 +11,22 @@ import java.util.Arrays;
 /**
  * This class creates entities with the given descriptions in the game's document and adds them on the map
  * GameManager will activate these newly made entities
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
  */
 public class EntityFactory {
-
+    /**
+     * Creates an entity with the given type
+     * @param type type
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param gameData game data
+     * @param isEnemy is enemy or not
+     * @param level level of the entity
+     * @return list of newly made entities
+     * @throws IllegalArgumentException if the given location is not valid (is in the territory of a tower)
+     */
     public static ArrayList<Entity> createEntity(Entity.Type type, int x, int y, GameData gameData, boolean isEnemy, int level)
             throws IllegalArgumentException {
         // handling bad x,y coordinates
@@ -49,6 +62,14 @@ public class EntityFactory {
         return entities;
     }
 
+    /**
+     * Create a king tower
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createKingTower(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int range = 7, hitSpeed = 1, hp = 0, damage = 0;
         switch (level) {
@@ -78,6 +99,14 @@ public class EntityFactory {
         return kingTower;
     }
 
+    /**
+     * Create a queen tower
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createQueenTower(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int range = 8, hp = 0, damage = 0;
         double hitSpeed = 0.8;
@@ -108,7 +137,14 @@ public class EntityFactory {
         return queenTower;
     }
 
-    // returns an array of barbarians because 4 barbarians should be added to the game
+    /**
+     * Creates 4  4 barbarians
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entities
+     */
     public static Entity[] createBarbarians(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 0.8;
@@ -169,7 +205,14 @@ public class EntityFactory {
         return troops;
     }
 
-    // returns an array of archers because 2 archers should be added to the game
+    /**
+     * Creates 2 archers
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entities
+     */
     public static Entity[] createArchers(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 1.2;
@@ -222,6 +265,14 @@ public class EntityFactory {
         return troops;
     }
 
+    /**
+     * Creates a baby dragon
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createBabyDragon(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 1.8;
@@ -257,6 +308,14 @@ public class EntityFactory {
         return dragon;
     }
 
+    /**
+     * Create a wizard
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createWizard(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 1.7;
@@ -292,6 +351,14 @@ public class EntityFactory {
         return wizard;
     }
 
+    /**
+     * Creates a mini pekka
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createMiniPekka(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 1.8;
@@ -327,6 +394,14 @@ public class EntityFactory {
         return miniPekka;
     }
 
+    /**
+     * Creates a giant
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createGiant(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 1.5;
@@ -362,6 +437,14 @@ public class EntityFactory {
         return giant;
     }
 
+    /**
+     * Creates a valkyrie
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createValkyrie(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 1.5;
@@ -397,6 +480,14 @@ public class EntityFactory {
         return valkyrie;
     }
 
+    /**
+     * Create rage spell
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createRage(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         double duration = 1;
         int radius = 5;
@@ -414,6 +505,14 @@ public class EntityFactory {
         return rage;
     }
 
+    /**
+     * Creates fireball spell
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createFireball(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         double areaDamage = 1;
         int radius = 3;
@@ -431,6 +530,14 @@ public class EntityFactory {
         return fireball;
     }
 
+    /**
+     * Creates arrows spell
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createArrows(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         double areaDamage = 1;
         int radius = 4;
@@ -448,6 +555,14 @@ public class EntityFactory {
         return arrows;
     }
 
+    /**
+     * Creates cannon
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly made entity
+     */
     public static Entity createCannon(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0;
         double hitSpeed = 0.8;
@@ -482,6 +597,14 @@ public class EntityFactory {
         return cannon;
     }
 
+    /**
+     * Creates inferno tower
+     * @param loc location
+     * @param isEnemy is enemy
+     * @param level level
+     * @param gameData game data
+     * @return newly mad entity
+     */
     public static Entity createInfernoTower(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         int hp = 0, damage = 0, maxDamage = 0;
         double hitSpeed = 0.4;

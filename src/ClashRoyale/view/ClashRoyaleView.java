@@ -6,6 +6,12 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * This class implements the view of the actual game
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class ClashRoyaleView extends Group {
 
     public final static double CELL_WIDTH = 20.0;
@@ -17,6 +23,9 @@ public class ClashRoyaleView extends Group {
     // tiles
     private final Image tileCenter, tileDown, tileLeft, tileLeftCornerDown, tileLeftCornerUp, tileRight, tileRightCornerDown, tileRightCornerUp, tileUp;
 
+    /**
+     * Creates default images for the map view
+     */
     public ClashRoyaleView() {
         tileDown = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_down.png"));
         tileLeft = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_left.png"));
@@ -29,28 +38,46 @@ public class ClashRoyaleView extends Group {
         tileCenter = new Image(getClass().getResourceAsStream("/ClashRoyale/resources/tiles/tile_center.png"));
     }
 
+    /**
+     * @return game's map view
+     */
     public ImageView[][] getMap() {
         return tiles;
     }
 
+    /**
+     * @return number of rows
+     */
     public int getRowCount() {
         return rowCount;
     }
 
+    /**
+     * @return number of columns
+     */
     public int getColumnCount() {
         return columnCount;
     }
 
+    /**
+     * @param rowCount row count
+     */
     public void setRowCount(int rowCount) {
         this.rowCount = rowCount;
         initMap();
     }
 
+    /**
+     * @param columnCount column count
+     */
     public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
         initMap();
     }
 
+    /**
+     * Initializes a map
+     */
     public void initMap() {
         tiles = new ImageView[rowCount][columnCount];
         for (int row = 0; row < rowCount; row++) {
@@ -66,6 +93,10 @@ public class ClashRoyaleView extends Group {
         }
     }
 
+    /**
+     * Update the view from the game map
+     * @param gameData game data
+     */
     public void update(GameData gameData) {
         Entity[][] map = gameData.map;
         for (int row = 0; row < gameData.rowCount; row++) {
@@ -100,7 +131,4 @@ public class ClashRoyaleView extends Group {
         }
 
     }
-
-
-
 }

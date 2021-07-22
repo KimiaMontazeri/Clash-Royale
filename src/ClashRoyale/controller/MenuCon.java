@@ -8,12 +8,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controller class for the main menu
+ * @author NEGAR
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class MenuCon {
     private Stage stage;
     private Scene scene;
@@ -32,29 +36,56 @@ public class MenuCon {
     @FXML
     private Button trainingCamp;
 
+    /**
+     * handling battle deck button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void battleDeckButtonPressed(ActionEvent event) throws IOException {
         changeScene(event,"../View/BattleDeckView.fxml");
 
     }
 
+    /**
+     * handling battle history button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void battleHistoryButtonPressed(ActionEvent event) throws IOException {
         changeScene(event,"../View/BattleHistoryView.fxml");
 
     }
 
+    /**
+     * handling profile button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void profileButtonPressed(ActionEvent event) throws IOException {
         changeScene(event,"../View/ProfileView.fxml");
 
     }
 
+    /**
+     * handling training camp button pressed
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void trainingCampButtonPressed(ActionEvent event) throws IOException {
         changeScene(event,"../View/TrainingCampView.fxml");
 
     }
+
+    /**
+     * Changes the scene to the given address
+     * @param event event
+     * @param address fxml file address
+     * @throws IOException I/O exception may occur in file loading
+     */
     public void changeScene(ActionEvent event,String address) throws IOException {
         root = FXMLLoader.load(getClass().getResource(address));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();

@@ -18,6 +18,12 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
+/**
+ * Controller for the battle deck menu
+ * @author NEGAR
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class BattleDeckCon {
     private Stage stage;
     private Scene scene;
@@ -68,6 +74,10 @@ public class BattleDeckCon {
     @FXML
     private ImageView im14;
 
+    /**
+     * Handling card selection
+     * @param event event
+     */
     @FXML
     void cardPressed(MouseEvent event) {
         ImageView cardImageView = (ImageView) event.getSource();
@@ -248,12 +258,21 @@ public class BattleDeckCon {
 
     }
 
+    /**
+     * Moves back to the main menu scene if Menu button is pressed
+     * @param event event
+     * @throws IOException I/O exception
+     */
     @FXML
     void menuInBattleDeck(ActionEvent event) throws IOException {
         changeScene(event, "../View/MenuView.fxml");
 
     }
 
+    /**
+     * Scaling down the card image view
+     * @param event event
+     */
     @FXML
     void scaleDown(MouseEvent event) {
         ImageView cardImageView = (ImageView) event.getSource();
@@ -270,7 +289,10 @@ public class BattleDeckCon {
 
     }
 
-
+    /**
+     * Scaling up the card image view
+     * @param event event
+     */
     @FXML
     void scaleUp(MouseEvent event) {
         ImageView cardImageView = (ImageView) event.getSource();
@@ -287,6 +309,9 @@ public class BattleDeckCon {
 
     }
 
+    /**
+     * initializes the whole scene and all the nodes inside
+     */
     @FXML
     public void initialize() {
         initSelectors();
@@ -316,7 +341,12 @@ public class BattleDeckCon {
             im34.setOpacity(0.2);
     }
 
-
+    /**
+     * Changes the scene to the given address
+     * @param event event
+     * @param address fxml file address
+     * @throws IOException I/O exception may occur in file loading
+     */
     public void changeScene(ActionEvent event, String address) throws IOException {
         root = FXMLLoader.load(getClass().getResource(address));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -325,6 +355,9 @@ public class BattleDeckCon {
         stage.show();
     }
 
+    /**
+     * Initializes the selectors
+     */
     public void initSelectors() {
         for (int i = 1; i <= 12; i++) {
             for (int j = 0; j < playersArchieve.getCurrentPlayer().getCards().size(); j++) {

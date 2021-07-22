@@ -22,7 +22,12 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
-
+/**
+ * Controller for the GameView
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class GameCon implements EventHandler<MouseEvent> {
 
     // the VBox that is going to show 4 cards and the next 5th card
@@ -34,10 +39,16 @@ public class GameCon implements EventHandler<MouseEvent> {
     private final GameManager gameManager;
     private Timeline gameTimer, elixirTimer, gameRenderingTimer;
 
+    /**
+     * Create a game controller
+     */
     public GameCon() {
         gameManager = new GameManager();
     }
 
+    /**
+     * initializes the controller class
+     */
     @FXML
     public void initialize() {
         // init game model
@@ -53,6 +64,9 @@ public class GameCon implements EventHandler<MouseEvent> {
         startElixirTimer(2);
     }
 
+    /**
+     * Initializes the tiles in the map
+     */
     public void initTiles() {
 
         ImageView[][] tiles = clashRoyaleView.getMap();
@@ -65,6 +79,9 @@ public class GameCon implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Render the game map to the user (stops everything if the game is over)
+     */
     public void render() {
         gameManager.updateGame();
         clashRoyaleView.update(gameManager.getGameData());
@@ -74,6 +91,9 @@ public class GameCon implements EventHandler<MouseEvent> {
             stop();
     }
 
+    /**
+     * Update the number of crowns that each player has won
+     */
     private void updateCrowns() {
         Platform.runLater(() -> {
             redCrowns.setText(String.valueOf(gameManager.getGameData().redCrownNum));
@@ -81,6 +101,9 @@ public class GameCon implements EventHandler<MouseEvent> {
         });
     }
 
+    /**
+     * Starts the game
+     */
     public void startGame() {
         this.gameRenderingTimer = new Timeline(
                 new KeyFrame(Duration.seconds(0.2), event -> render())
@@ -89,6 +112,10 @@ public class GameCon implements EventHandler<MouseEvent> {
         gameRenderingTimer.play();
     }
 
+    /**
+     * Starts the timer that increments the number of elixirs
+     * @param duration duration of the timer
+     */
     public void startElixirTimer(int duration) {
         this.elixirTimer = new Timeline(
                 new KeyFrame(Duration.seconds(duration), event -> {
@@ -105,12 +132,18 @@ public class GameCon implements EventHandler<MouseEvent> {
         elixirTimer.play();
     }
 
+    /**
+     * Starts the game's timer
+     */
     public void startGameTimer() {
         this.gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> decrementSecond()));
         gameTimer.setCycleCount(Animation.INDEFINITE);
         gameTimer.play();
     }
 
+    /**
+     * Decrements seconds from the game timer (Stops the game if it reaches 00:00)
+     */
     private void decrementSecond() {
         String time = timer.getText();
 
@@ -136,6 +169,11 @@ public class GameCon implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Sets what methods to be called when mouse hovers on the card images view
+     * @param cardImageView card image view
+     * @param isAffordable determines whether this card is affordable or not
+     */
     private void setMouseHoverOnCard(ImageView cardImageView, boolean isAffordable) {
         var scaleTrans = new ScaleTransition(Duration.millis(250), cardImageView);
         scaleTrans.setFromX(1.0);
@@ -169,6 +207,10 @@ public class GameCon implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Handling mouse click
+     * @param mouseEvent mouse event
+     */
     @Override
     public void handle(MouseEvent mouseEvent) {
         ImageView source = (ImageView) mouseEvent.getSource();
@@ -177,6 +219,11 @@ public class GameCon implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Handling drag detection on a card image view
+     * @param mouseEvent mouse event
+     * @param imageView card image view that is being dragged
+     */
     @FXML
     private void handleOnDragDetection(MouseEvent mouseEvent, ImageView imageView) {
         selectedCard = imageView;
@@ -187,6 +234,10 @@ public class GameCon implements EventHandler<MouseEvent> {
         mouseEvent.consume();
     }
 
+    /**
+     * Handles image drag over
+     * @param event drag event
+     */
     @FXML
     private void handleImageDragOver(DragEvent event) {
         if (event.getDragboard().hasImage()) {
@@ -194,6 +245,11 @@ public class GameCon implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Handles an image drop on the map
+     * Adds the corresponding entity to the map if possible
+     * @param event drag event
+     */
     @FXML
     private void handleImageDrop(DragEvent event) {
         // finding the tile that the card has been dropped on
@@ -222,6 +278,9 @@ public class GameCon implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Update the card view (makes affordable cards selectable and vice versa)
+     */
     private void updateCardView() {
         Platform.runLater(() -> {
             // update cards' images
@@ -240,6 +299,9 @@ public class GameCon implements EventHandler<MouseEvent> {
         });
     }
 
+    /**
+     * Stops the whole game model
+     */
     public void stop() {
         this.gameTimer.stop();
         this.elixirTimer.stop();
@@ -250,7 +312,7 @@ public class GameCon implements EventHandler<MouseEvent> {
     }
 
     /**
-     * loads the battle history fxml file
+     * Loads the battle history fxml file
      */
     private void switchToBattleHistory() {
         try {

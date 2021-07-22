@@ -4,6 +4,12 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This class can be used for playing an audio file
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class AudioPlayer {
 
     private Clip clip;
@@ -12,6 +18,10 @@ public class AudioPlayer {
     private AudioInputStream audioInputStream;
     private final String filePath;
 
+    /**
+     * Constructs an audio file
+     * @param filePath file path of the audio
+     */
     public AudioPlayer(String filePath) {
         this.filePath = filePath;
         try {
@@ -26,19 +36,24 @@ public class AudioPlayer {
         }
     }
 
+    /**
+     * @return state of this audio player
+     */
     public String getState() {
         return state;
     }
 
-    public Long getCurrentFrame() {
-        return currentFrame;
-    }
-
+    /**
+     * Plays the audio file
+     */
     public void play() {
         clip.start();
         state = "play";
     }
 
+    /**
+     * Pauses the audio file
+     */
     public void pause() {
         if (!state.equals("paused")) {
             this.currentFrame = this.clip.getMicrosecondPosition();
@@ -47,6 +62,9 @@ public class AudioPlayer {
         }
     }
 
+    /**
+     * Stops the audio file
+     */
     public void stop() {
         currentFrame = 0L;
         clip.stop();
@@ -54,6 +72,9 @@ public class AudioPlayer {
         state = "stop";
     }
 
+    /**
+     * Restarts this audio file
+     */
     public void restart() {
         clip.stop();
         clip.close();
@@ -63,11 +84,14 @@ public class AudioPlayer {
         this.play();
     }
 
+    /**
+     * Resets the audio player
+     */
     public void resetAudioStream() {
         try {
             audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
             clip.open(audioInputStream);
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.loop(1);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }

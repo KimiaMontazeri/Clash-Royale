@@ -1,7 +1,7 @@
 package ClashRoyale;
 
 import ClashRoyale.model.elements.PlayersArchieve;
-import ClashRoyale.utils.FileUtils;
+import ClashRoyale.utils.FileUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +13,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    /**
+     * Starts the application
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../ClashRoyale/View/SignInView.fxml"));
@@ -31,6 +34,9 @@ public class Main extends Application {
         });
     }
 
+    /**
+     * Displays an alert message for the user and saves everything if they confirm closing the program
+     */
     public void logout(Stage stage) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Logout");
@@ -38,12 +44,12 @@ public class Main extends Application {
         alert.setContentText("Do you want to save before exiting?");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
-            FileUtils fileUtils = new FileUtils();
 
-            PlayersArchieve playersArchieve =PlayersArchieve.getInstance();
-            fileUtils.delete("saved");
-            fileUtils.save("saved",playersArchieve);
-            // TODO save EVERYTHING
+            // save everything before closing the window
+            PlayersArchieve playersArchieve = PlayersArchieve.getInstance();
+            FileUtil fileUtil = new FileUtil();
+            fileUtil.writeToFile(playersArchieve);
+
             stage.close();
         }
     }

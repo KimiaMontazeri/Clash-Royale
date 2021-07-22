@@ -7,6 +7,8 @@ public class PlayersArchieve implements Serializable {   ////singleton
 
     private static PlayersArchieve instance = null;
     private Player currentPlayer=null;
+    private ArrayList<Player> playersArchieve =new ArrayList<>();
+
     public static PlayersArchieve getInstance()
     {
         if (instance == null) {
@@ -20,10 +22,18 @@ public class PlayersArchieve implements Serializable {   ////singleton
         return currentPlayer;
     }
 
-    ArrayList<Player> playersArchieve =new ArrayList<>();
     public ArrayList<Player> getPlayersArchieve() {
         return playersArchieve;
     }
+
+    public void setPlayersArchieve(ArrayList<Player> playersArchieve) {
+        this.playersArchieve = playersArchieve;
+    }
+
+    public static void setInstance(PlayersArchieve instance) {
+        PlayersArchieve.instance = instance;
+    }
+
     public boolean isAvailable(String username){
         for (Player player : playersArchieve) {
             if (player.getUsername().equals (username)) {

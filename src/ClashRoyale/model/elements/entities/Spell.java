@@ -9,6 +9,12 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Spell category for the game's card
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class Spell extends Card {
 
     private final int radius;
@@ -18,6 +24,13 @@ public class Spell extends Card {
     private Timeline timeline; // a timeline to model the speed(for fireball & arrows) or the duration(for rage)
     private double rate = 1;
 
+    /**
+     * Constructs a spell
+     * @param type type of this spell
+     * @param isEnemy determines whether this spell if for the blue team or not
+     * @param radius the radius it can affect
+     * @param var
+     */
     public Spell(Type type, boolean isEnemy, int radius, double var) {
         super(type, isEnemy);
         this.radius = radius;
@@ -30,6 +43,9 @@ public class Spell extends Card {
         loadImages();
     }
 
+    /**
+     * Loads the image of this spell
+     */
     private void loadImages() {
         if (getType() == Type.FIRE) {
             images.put("DEFAULT", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/explosions/fire.png")));
@@ -38,31 +54,52 @@ public class Spell extends Card {
         }
     }
 
+    /**
+     * @return current image
+     */
     @Override
     public Image getCurrentImage() {
         return images.get("DEFAULT");
     }
 
+    /**
+     * @return radius
+     */
     public int getRadius() {
         return radius;
     }
 
+    /**
+     * @return duration
+     */
     public double getDuration() {
         return duration;
     }
 
+    /**
+     * @return area damage
+     */
     public int getAreaDamage() {
         return areaDamage;
     }
 
+    /**
+     * @param areaDamage area damage
+     */
     public void setAreaDamage(int areaDamage) {
         this.areaDamage = areaDamage;
     }
 
+    /**
+     * @param rate rate of boosting (if type is RAGE)
+     */
     public void setRate(double rate) {
         this.rate = rate;
     }
 
+    /**
+     * Activates this spell
+     */
     @Override
     public void activate() {
         if (getLocation() != null) { // it should be placed on the map otherwise, it cannot be launched
@@ -72,6 +109,9 @@ public class Spell extends Card {
         }
     }
 
+    /**
+     * Starts timeline for this spell
+     */
     public void startTimeline() {
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> update()) // calls update() each second for "duration + 1" times
@@ -80,6 +120,9 @@ public class Spell extends Card {
         timeline.play();
     }
 
+    /**
+     * launches this spell
+     */
     private void launch() {
         int x = (int) getLocation().getX();
         int y = (int) getLocation().getY();
@@ -97,6 +140,11 @@ public class Spell extends Card {
         }
     }
 
+    /**
+     * Attacks (if type is FIREBALL or ARROWS)
+     * @param x x coordinate
+     * @param y y coordinate
+     */
     private void attack(int x, int y) {
         Entity entity = gameData.map[x][y];
         if (entity != null) {
@@ -108,6 +156,11 @@ public class Spell extends Card {
 
     }
 
+    /**
+     * Activates rage
+     * @param x x coordinate
+     * @param y y coordinate
+     */
     private void activateRage(int x, int y) { // activates rage on the given x,y coordinate
         Entity entity = gameData.map[x][y];
         if (entity != null) {
@@ -119,6 +172,9 @@ public class Spell extends Card {
         }
     }
 
+    /**
+     * Decrement the duration until it reaches 0 (when it reaches 0, the timeline stops)
+     */
     private void update() {
         duration--;
         if (duration == 0) {
@@ -126,6 +182,9 @@ public class Spell extends Card {
         }
     }
 
+    /**
+     * Stops this spell and resets everything to its normal state
+     */
     public void stop() {
         if (timeline != null && timeline.getStatus().equals(Animation.Status.RUNNING))
             timeline.stop();

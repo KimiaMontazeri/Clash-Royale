@@ -4,13 +4,27 @@ package ClashRoyale.model.elements.entities;
 import ClashRoyale.utils.AudioPlayer;
 import javafx.scene.image.Image;
 
-
+/**
+ * Card represents the character that is placed on the map
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public abstract class Card extends Entity {
-
+    /**
+     * Constructs a card
+     * @param type card type
+     * @param isEnemy determines whether it's on the red team or blue
+     */
     public Card(Type type, boolean isEnemy) {
         super(type, isEnemy);
     }
 
+    /**
+     * Loads the image corresponding to the given card type
+     * @param cardType card type
+     * @return card image
+     */
     public static Image loadCardImage(Entity.Type cardType) {
         switch (cardType) {
             case ARCHER -> {
@@ -55,6 +69,10 @@ public abstract class Card extends Entity {
         }
     }
 
+    /**
+     * Plays the sound of the given card type using AudioPlayer class
+     * @param cardType card type
+     */
     public static void playSound(Entity.Type cardType) {
         String path = null;
         AudioPlayer audioPlayer;

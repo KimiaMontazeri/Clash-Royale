@@ -7,21 +7,35 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The game's towers that are placed on the map at the start of the game
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class Tower extends Entity {
 
     private int hp, damage;
     private double hitSpeed;
     private final int range;
     private boolean isActivated, isAttacked;
-    private ArrayList<Point2D> gap;
     // isAttacked is mostly used for KingTower (Because KingTower will be activated if it gets attacked, or if one of the queen towers get damaged)
 
     private Timeline attackingTimeline;
     private Entity targetEnemy;
 
+    /**
+     * Constructs a tower
+     * @param type type of this tower
+     * @param isEnemy team blue or red
+     * @param loc location
+     * @param hp hp
+     * @param damage damage
+     * @param hitSpeed hit speed
+     * @param range range of detecting enemy
+     */
     public Tower(Type type, boolean isEnemy, Point2D loc, int hp, int damage, double hitSpeed, int range) {
         super(type, isEnemy, loc);
         this.hp = hp;
@@ -29,32 +43,13 @@ public class Tower extends Entity {
         this.hitSpeed = hitSpeed;
         this.range = range;
         isActivated = isAttacked = false;
-        gap = new ArrayList<>();
-        createGap();
         images = new HashMap<>();
         loadImages();
     }
 
-    private void createGap() {
-        int x = (int) getLocation().getX(), y = (int) getLocation().getY();
-        if (gameData.isInsideMap(x - 1, y - 1))
-            gap.add(new Point2D(x - 1, y - 1));
-        if (gameData.isInsideMap(x + 1, y + 1))
-            gap.add(new Point2D(x + 1, y + 1));
-        if (gameData.isInsideMap(x + 1, y - 1))
-            gap.add(new Point2D(x + 1, y - 1));
-        if (gameData.isInsideMap(x - 1, y + 1))
-            gap.add(new Point2D(x - 1, y + 1));
-        if (gameData.isInsideMap(x + 1, y))
-            gap.add(new Point2D(x + 1, y));
-        if (gameData.isInsideMap(x - 1, y))
-            gap.add(new Point2D(x - 1, y));
-        if (gameData.isInsideMap(x, y + 1))
-            gap.add(new Point2D(x, y + 1));
-        if (gameData.isInsideMap(x, y - 1))
-            gap.add(new Point2D(x, y - 1));
-    }
-
+    /**
+     * Loads the image of this tower (corresponding to its type)
+     */
     private void loadImages() {
         if (getType() == Type.KING_TOWER) {
             if (isEnemy())
@@ -70,6 +65,9 @@ public class Tower extends Entity {
         images.put("DEAD", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/explosions/black-smoke.png")));
     }
 
+    /**
+     * @return the current image of this tower
+     */
     @Override
     public Image getCurrentImage() {
         if (isDead())
@@ -77,48 +75,83 @@ public class Tower extends Entity {
         return images.get("DEFAULT");
     }
 
+    /**
+     * @return hp
+     */
     public int getHp() {
         return hp;
     }
 
+    /**
+     * @return damage
+     */
     public int getDamage() {
         return damage;
     }
 
+    /**
+     * @return hit speed
+     */
     public double getHitSpeed() {
         return hitSpeed;
     }
 
+    /**
+     * @return range of this tower
+     */
     public int getRange() {
         return range;
     }
 
+    /**
+     * @return true if it's activated
+     */
     public boolean isActivated() {
         return isActivated;
     }
 
+    /**
+     * @return true if it has been attacked some while ago
+     */
     public boolean isAttacked() {
         return isAttacked;
     }
 
+    /**
+     * @param hp hp
+     */
     public void setHp(int hp) {
         this.hp = hp;
     }
 
+    /**
+     * @param damage tower's damage
+     */
     public void setDamage(int damage) {
         this.damage = damage;
     }
 
+    /**
+     * @param hitSpeed hit speed
+     */
     public void setHitSpeed(double hitSpeed) {
         this.hitSpeed = hitSpeed;
     }
 
+    /**
+     * Boosts this tower (increases its damage and hit speed)
+     * @param rate rate of boosting
+     */
     @Override
     public void boost(double rate) {
         setDamage((int) (getDamage() * rate));
         setHitSpeed((int) (getHitSpeed() * rate));
     }
 
+    /**
+     * Undo boost on this tower
+     * @param rate rate of boosting
+     */
     @Override
     public void undoBoost(double rate) {
         setDamage((int) (getDamage() / rate));
@@ -149,9 +182,12 @@ public class Tower extends Entity {
         attackingTimeline.play();
     }
 
+    /**
+     * Attacks target enemy until it can kill it
+     * Then it will search for another enemy in its range
+     */
     public void attack() {
         if (targetEnemy != null && !targetEnemy.isDead()) {
-            System.out.println(getType() + "is attacking " + targetEnemy.getType());
             targetEnemy.getAttacked(this.damage);
             setAttacking(true);
             return; // won't search for other enemies until the current target dies
@@ -160,6 +196,10 @@ public class Tower extends Entity {
         setAttacking(false);
     }
 
+    /**
+     * Gets attacked
+     * @param damage damage done on this tower
+     */
     @Override
     public void getAttacked(int damage) {
         isAttacked = true;
@@ -229,7 +269,7 @@ public class Tower extends Entity {
     }
 
     /**
-     * will also be called by the gameManager when the game has ended
+     * stops this tower
      */
     public void stop() {
         if (attackingTimeline != null && attackingTimeline.getStatus().equals(Animation.Status.RUNNING))

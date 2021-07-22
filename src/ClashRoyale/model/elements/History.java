@@ -1,10 +1,11 @@
 package ClashRoyale.model.elements;
 
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class History {
+public class History implements Serializable {
     private final String opponentName;
     private final String dateStr;
     private final String winner;

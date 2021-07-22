@@ -10,14 +10,28 @@ import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for setting up the game at the beginning
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class GameSetup {
 
     private final GameData gameData;
 
+    /**
+     * Constructs a GameSetup
+     */
     public GameSetup() {
         gameData = GameData.getInstance();
     }
 
+    /**
+     * Creates a map and initializes default values to it
+     * @param level1 level of the first player
+     * @param level2 level of the second player
+     */
     public void initMap(int level1, int level2) {
         gameData.bridgeUp = new Point2D(4, 15);
         gameData.bridgeDown = new Point2D(13, 15);
@@ -56,6 +70,9 @@ public class GameSetup {
         }
     }
 
+    /**
+     * Sets up the territory of each tower
+     */
     public void setUpTerritories() {
 
         gameData.redQueenUpTerritory = new Territory(0, 8, 15, 23);
@@ -68,6 +85,9 @@ public class GameSetup {
 
     }
 
+    /**
+     * Sets up the player's cards
+     */
     public void setUpCards() {
         ArrayList<Entity.Type> playerCards = gameData.player.getCards();
 

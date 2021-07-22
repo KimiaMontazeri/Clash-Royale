@@ -10,9 +10,18 @@ import javafx.util.Duration;
 
 import java.util.HashMap;
 
-
+/**
+ * This class models a troop that will be placed on the map
+ * and some AI is used to make it move closer to enemies and kill them
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class Troop extends Card {
 
+    /**
+     * a ratio that shows the speed of a troop
+     */
     public enum Speed {
         SLOW, MEDIUM, FAST, VERY_FAST // VERY_FAST is used for when the troop's speed is boosted
     }
@@ -29,6 +38,18 @@ public class Troop extends Card {
     private Timeline movingTimeline, attackingTimeline;
     private Entity targetEnemy;
 
+    /**
+     * Constructs a troop
+     * @param type type
+     * @param isEnemy determines whether its on the blue team or not
+     * @param hp hp
+     * @param damage damage
+     * @param targetType target type that it can attack
+     * @param speed speed
+     * @param hitSpeed hit speed
+     * @param range range
+     * @param isAreaSplash whether it is area splash or not (damages the area around this troop)
+     */
     public Troop(Type type, boolean isEnemy, int hp, int damage, TargetType targetType, Speed speed, double hitSpeed,
                  int range, boolean isAreaSplash) {
         super(type, isEnemy);
@@ -43,6 +64,9 @@ public class Troop extends Card {
         loadImages();
     }
 
+    /**
+     * @return current image of this troop
+     */
     @Override
     public Image getCurrentImage() {
         if (isEnemy()) {
@@ -56,50 +80,87 @@ public class Troop extends Card {
         }
     }
 
+    /**
+     * @return hp
+     */
     public int getHp() {
         return hp;
     }
 
+    /**
+     * @return damage
+     */
     public int getDamage() {
         return damage;
     }
 
+    /**
+     * @return target type
+     */
     public TargetType getTargetType() {
         return targetType;
     }
 
+    /**
+     * @return running speed
+     */
     public Speed getSpeed() {
         return speed;
     }
 
+    /**
+     * @return hit speed
+     */
     public double getHitSpeed() {
         return hitSpeed;
     }
 
+    /**
+     * @return range
+     */
     public double getRange() {
         return range;
     }
 
+    /**
+     * @return is area splash or not
+     */
     public boolean isAreaSplash() {
         return isAreaSplash;
     }
 
+    /**
+     * @param hp hp
+     */
     public void setHp(int hp) {
         this.hp = hp;
     }
 
+    /**
+     * @param damage damage
+     */
     public void setDamage(int damage) {
         this.damage = damage;
     }
 
+    /**
+     * @param hitSpeed hit speed
+     */
     public void setHitSpeed(double hitSpeed) {
         this.hitSpeed = hitSpeed;
     }
 
+    /**
+     * @param speed running speed
+     */
     public void setSpeed(Speed speed) {
         this.speed = speed;
     }
 
+    /**
+     * Boots this troop (increases its speed, hit speed, and damage)
+     * @param rate rate of boosting
+     */
     @Override
     public void boost(double rate) {
         setDamage((int) (getDamage() * rate));     // boosting the damage
@@ -111,9 +172,12 @@ public class Troop extends Card {
         }
         movingTimeline.stop();
         startMovingTimeline();
-        System.out.println(getType() + " got boosted speed " + speed);
     }
 
+    /**
+     * Undo the boost on this troop
+     * @param rate rate of boosting
+     */
     @Override
     public void undoBoost(double rate) {
         setDamage((int) (getDamage() / rate));     // undo the boost on damage
@@ -125,32 +189,38 @@ public class Troop extends Card {
         }
         movingTimeline.stop();
         startMovingTimeline();
-        System.out.println(getType() + " undo boost speed " + speed);
     }
 
+    /**
+     * Activates this troop
+     */
     @Override
     public void activate() {
         startMovingTimeline();
         Card.playSound(getType());
     }
 
+    /**
+     * Attacks target enemy
+     */
     public void attack() {
         if (targetEnemy != null && !targetEnemy.isDead()) {
             setAttacking(true);
-            System.out.println(getType() + " is attacking " + targetEnemy.getType());
             targetEnemy.getAttacked(this.damage);
             if (isAreaSplash) {
                 areaSplash();
             }
             return;
         }
-        // if this line is reached, it means that the target has died and the troop should start walking again
+        // the troop should start walking again
         setAttacking(false);
         attackingTimeline.stop();
         startMovingTimeline();
     }
 
-    // attacks all the enemies surrounding this troop in 1 tile radius
+    /**
+     * attacks all the enemies surrounding this troop in 1 tile radius
+     */
     public void areaSplash() {
         Entity[] entities = new Entity[8];
         int x = (int) getLocation().getX(), y = (int) getLocation().getY(), index = -1;
@@ -178,6 +248,10 @@ public class Troop extends Card {
         }
     }
 
+    /**
+     * Gets attacked
+     * @param damage damage done on this entity
+     */
     @Override
     public void getAttacked(int damage) {
         this.hp -= damage;
@@ -188,15 +262,21 @@ public class Troop extends Card {
         }
     }
 
+    /**
+     * Update the troop in the map
+     * @param prevLoc previous location
+     */
     public void updateTroopInMap(Point2D prevLoc) {
         gameData.map[(int) prevLoc.getX()][(int) prevLoc.getY()] = null;
         gameData.map[(int) getLocation().getX()][(int) getLocation().getY()] = this;
     }
 
+    /**
+     * Moves this troop
+     */
     public void move() {
         targetEnemy = findEnemy();
         if (targetEnemy != null) {
-            System.out.println(this.getType() + " found enemy " + targetEnemy.getType());
             movingTimeline.stop(); // stands still and starts attacking the enemy that it just found
             startAttackingTimeline();
             return;
@@ -268,6 +348,9 @@ public class Troop extends Card {
         updateTroopInMap(prevLoc);
     }
 
+    /**
+     * @return direction to the closest tower
+     */
     private Direction findDirectionToClosestTower() {
         Tower t1, t2, t3, closestTower;
         // getting towers from gameData
@@ -311,11 +394,15 @@ public class Troop extends Card {
         return null;
     }
 
+    /**
+     * handles going offscreen
+     * @param possibleLoc possible location
+     * @return better location to go to
+     */
     private Point2D handleGoingOffscreen(Point2D possibleLoc) {
         // troops can't go to the corners of the map
         int x = (int) possibleLoc.getX(), y = (int) possibleLoc.getY();
         if (x <= 0 || x >= gameData.rowCount - 1) {
-            System.out.println("x = " + x + " is out of bounds");
             // handling x
             if (x <= 0)       possibleLoc = getLocation().add(directionToPoint2D(Direction.DOWN));
             else              possibleLoc = getLocation().add(directionToPoint2D(Direction.UP));
@@ -326,7 +413,6 @@ public class Troop extends Card {
         }
 
         if (y <= 0 || y >= gameData.colCount - 1) {
-            System.out.println("y = " + y + " is out of bounds");
             // handling y
             if (y <= 0)       possibleLoc = getLocation().add(directionToPoint2D(Direction.RIGHT));
             else              possibleLoc = getLocation().add(directionToPoint2D(Direction.LEFT));
@@ -338,7 +424,10 @@ public class Troop extends Card {
         return possibleLoc;
     }
 
-    // finds an enemy in its range
+    /**
+     * finds an enemy in its range
+     * @return enemy
+     */
     private Entity findEnemy() {
         int x1 = (int) getLocation().getX(); // current x coordinate
         int y1 = (int) getLocation().getY(); // current y coordinate
@@ -394,7 +483,10 @@ public class Troop extends Card {
         return null;
     }
 
-    // finds the closest bridge and decides which direction is better
+    /**
+     * finds the closest bridge and decides which direction is better
+     * @return direction
+     */
     private Direction findDirectionToBridge() {
         int dx1, dx2;
         dx1 = Math.abs((int) (getLocation().getX() - gameData.bridgeUp.getX()));
@@ -437,6 +529,11 @@ public class Troop extends Card {
         attackingTimeline.play();
     }
 
+    /**
+     * Converts direction to point2D
+     * @param direction direction to convert
+     * @return point2D
+     */
     private Point2D directionToPoint2D(Direction direction) {
         return switch (direction) {
             case UP -> new Point2D(-1, 0);
@@ -446,7 +543,9 @@ public class Troop extends Card {
         };
     }
 
-    // stops all the running timelines
+    /**
+     * Stops this troop (stops all the running timelines)
+     */
     public void stop() {
         if (attackingTimeline != null)
             attackingTimeline.stop();
@@ -454,6 +553,9 @@ public class Troop extends Card {
             movingTimeline.stop();
     }
 
+    /**
+     * Loads images for this troop
+     */
     private void loadImages() {
         images.put("RUNNING", null);
         images.put("RUNNING_ENEMY", null);
@@ -470,6 +572,9 @@ public class Troop extends Card {
         }
     }
 
+    /**
+     * Loads archer images
+     */
     private void loadArchers() {
         images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer_running.gif")));
         images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer_running_enemy.gif")));
@@ -477,6 +582,9 @@ public class Troop extends Card {
         images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/archers/archer_standing_enemy.png")));
     }
 
+    /**
+     * Loads baby dragon images
+     */
     private void loadBabyDragon() {
         images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/baby-dragon/babydragon_fly.gif")));
         images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/baby-dragon/babydragon_fly_enemy.gif")));
@@ -484,6 +592,9 @@ public class Troop extends Card {
         images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/baby-dragon/babydragon_attack_enemy.gif")));
     }
 
+    /**
+     * Loads barbarian images
+     */
     private void loadBarbarians() {
         images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/barbarians/barbarian_running.gif")));
         images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/barbarians/barbarian_running_enemy.gif")));
@@ -491,6 +602,9 @@ public class Troop extends Card {
         images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/barbarians/barbarian_standing_enemy.png")));
     }
 
+    /**
+     * Loads giant images
+     */
     private void loadGiant() {
         images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/giant/giant_running.gif")));
         images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/giant/giant_running_enemy.gif")));
@@ -498,6 +612,9 @@ public class Troop extends Card {
         images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/giant/giant_standing_enemy.png")));
     }
 
+    /**
+     * Loads mini pekka images
+     */
     private void loadMiniPekka() {
         images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/mini-pekka/pekka_running.gif")));
         images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/mini-pekka/pekka_running_enemy.gif")));
@@ -505,6 +622,9 @@ public class Troop extends Card {
         images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/mini-pekka/pekka_standing_enemy.png")));
     }
 
+    /**
+     * Loads valkyrie images
+     */
     private void loadValkyrie() {
         images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/valkyrie/valkyrie_running.gif")));
         images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/valkyrie/valkyrie_running_enemy.gif")));
@@ -512,6 +632,9 @@ public class Troop extends Card {
         images.replace("ATTACKING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/valkyrie/valkyrie_attacking_enemy.gif")));
     }
 
+    /**
+     * Loads wizard images
+     */
     private void loadWizard() {
         images.replace("RUNNING", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/wizard/wizard_running.gif")));
         images.replace("RUNNING_ENEMY", new Image(getClass().getResourceAsStream("/ClashRoyale/resources/troops/wizard/wizard_running_enemy.gif")));

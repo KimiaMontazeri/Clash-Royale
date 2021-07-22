@@ -9,12 +9,24 @@ import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
+/**
+ * Game's medium bot
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class MediumBot extends Bot {
 
-    public MediumBot() {
-        super(2);
+    /**
+     * Create a medium bot with level 2
+     */
+    public MediumBot(int level) {
+        super(level);
     }
 
+    /**
+     * Starts this bot
+     */
     @Override
     public void start() {
         this.timeline = new Timeline(
@@ -26,6 +38,10 @@ public class MediumBot extends Bot {
         timeline.play();
     }
 
+    /**
+     * Chooses a card to use
+     * @return card type
+     */
     public Entity.Type chooseCard() {
         Entity.Type chosenCard;
         int r = getRandomGenerator().nextInt(10);
@@ -44,6 +60,9 @@ public class MediumBot extends Bot {
         return chosenCard;
     }
 
+    /**
+     * Finds a coordinate wisely to place a troop in it
+     */
     public void findTroopCoordinate() {
         int attempts = 0;
         do {
@@ -68,6 +87,9 @@ public class MediumBot extends Bot {
         } while (gameData.isInsideMap(x, y) && gameData.map[x][y] == null);
     }
 
+    /**
+     * Finds a coordinate wisely to place a building in it
+     */
     public void findBuildingCoordinate() {
         int attempt = 0;
         do {
@@ -81,6 +103,10 @@ public class MediumBot extends Bot {
         } while (gameData.isInsideMap(x, y) && gameData.map[x][y] == null);
     }
 
+    /**
+     * Finds a coordinate wisely to place a spell in it
+     * @param chosenSpell chosen spell card
+     */
     public void findSpellCoordinate(Entity.Type chosenSpell) {
         if (chosenSpell != null) {
             if (chosenSpell == Entity.Type.RAGE) {
@@ -118,6 +144,9 @@ public class MediumBot extends Bot {
         }
     }
 
+    /**
+     * Boosts a location wisely
+     */
     public void boost() {
 
         if (gameData.redKingTower.getHp() <= 1000) {
@@ -150,6 +179,10 @@ public class MediumBot extends Bot {
         }
     }
 
+    /**
+     * Finds enemy in its field
+     * @return location of the first found enemy
+     */
     private Point2D findEnemyInField() {
         for (int row = 0; row < gameData.rowCount; row++) {
             for (int col = 17; col < gameData.colCount; col++) {
@@ -160,6 +193,9 @@ public class MediumBot extends Bot {
         return null;
     }
 
+    /**
+     * @return bot's name
+     */
     public String getName() {
         return "MEDIUM BOT";
     }

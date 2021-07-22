@@ -7,6 +7,12 @@ import javafx.animation.Timeline;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Game's bot
+ * @author KIMIA
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public abstract class Bot {
 
     private final int level;
@@ -16,34 +22,60 @@ public abstract class Bot {
 
     protected int x = 0, y = 0;
 
+    /**
+     * Constructs a bot
+     * @param level level
+     */
     public Bot(int level) {
         this.level = level;
         this.randomGenerator = new Random();
         gameData = GameData.getInstance();
     }
 
+    /**
+     * @return level
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * @return random generator
+     */
     protected Random getRandomGenerator() {
         return randomGenerator;
     }
 
+    /**
+     * @param type card type
+     * @return if the card is troop
+     */
     protected boolean isTroop(Entity.Type type) {
         return type == Entity.Type.BARBARIANS || type == Entity.Type.ARCHER ||
                 type == Entity.Type.BABY_DRAGON || type == Entity.Type.MINI_PEKKA ||
                 type == Entity.Type.GIANT || type == Entity.Type.VALKYRIE;
     }
 
+    /**
+     * @param type card type
+     * @return if the card is spell
+     */
     protected boolean isSpell(Entity.Type type) {
         return type == Entity.Type.FIRE || type == Entity.Type.RAGE || type == Entity.Type.ARROWS;
     }
 
+    /**
+     * @param type card type
+     * @return if the card is building
+     */
     protected boolean isBuilding(Entity.Type type) {
         return type == Entity.Type.INFERNO_TOWER || type == Entity.Type.CANNON;
     }
 
+    /**
+     * Chooses a troop randomly
+     * @return card type
+     */
     protected Entity.Type chooseTroop() {
         int r = randomGenerator.nextInt(7);
         if (r == 1)
@@ -59,6 +91,10 @@ public abstract class Bot {
         return Entity.Type.VALKYRIE;
     }
 
+    /**
+     * Chooses a building randomly
+     * @return card type
+     */
     protected Entity.Type chooseBuilding() {
         int r = randomGenerator.nextInt(2);
         if (r == 0)
@@ -66,6 +102,10 @@ public abstract class Bot {
         return Entity.Type.CANNON;
     }
 
+    /**
+     * Chooses a spell randomly
+     * @return card type
+     */
     protected Entity.Type chooseSpell() {
         int r = randomGenerator.nextInt(3);
         if (r == 0)
@@ -75,6 +115,10 @@ public abstract class Bot {
         return Entity.Type.RAGE;
     }
 
+    /**
+     * Places entity on the map
+     * @param type card type
+     */
     protected void placeEntity(Entity.Type type) {
         if (type == null)
             return;
@@ -91,6 +135,9 @@ public abstract class Bot {
         }
     }
 
+    /**
+     * Starts this bot
+     */
     public abstract void start();
 
     /**
@@ -100,6 +147,9 @@ public abstract class Bot {
         this.timeline.stop();
     }
 
+    /**
+     * @return the name of this bot
+     */
     public String getName() {
         return "BOT";
     }

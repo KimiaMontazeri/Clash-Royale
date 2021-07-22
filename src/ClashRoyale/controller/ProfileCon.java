@@ -17,6 +17,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Controller class for the profile menu
+ * @author NEGAR
+ * @since 7-22-2021
+ * @version 1.0
+ */
 public class ProfileCon {
     private Stage stage;
     private Scene scene;
@@ -63,6 +69,10 @@ public class ProfileCon {
 
     @FXML
     private Label usernameProfile;
+
+    /**
+     * initializes the whole scene and all the nodes inside
+     */
     @FXML
     private void initialize() {
         im1.setVisible(false);
@@ -166,11 +176,23 @@ public class ProfileCon {
 
     }
 
+    /**
+     * Moves back to main menu
+     * @param event event
+     * @throws IOException I/O exception may occur
+     */
     @FXML
     void menuInprofile(ActionEvent event) throws IOException {
         changeScene(event,"../View/MenuView.fxml");
 
     }
+
+    /**
+     * Changes the scene to the given address
+     * @param event event
+     * @param address fxml file address
+     * @throws IOException I/O exception may occur in file loading
+     */
     public void changeScene(ActionEvent event,String address) throws IOException {
         root = FXMLLoader.load(getClass().getResource(address));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -178,6 +200,10 @@ public class ProfileCon {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Initializing the hashmap for card image views
+     */
     public void mappingHashmap(){
         cardsImageMap.put(Entity.Type.ARCHER,"archer.png");
         cardsImageMap.put(Entity.Type.ARROWS,"arrows.png");

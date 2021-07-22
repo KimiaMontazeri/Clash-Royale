@@ -327,13 +327,13 @@ public class Troop extends Card {
             Entity nextCell = gameData.map[(int) possibleLoc.getX()][(int) possibleLoc.getY()];
             if (nextCell instanceof Troop) {
                 if (possibleDirection == Direction.LEFT)
-                    possibleDirection = Direction.UP;
+                    setLocation(getLocation().add(directionToPoint2D(Direction.UP)));
                 else if (possibleDirection == Direction.RIGHT)
-                    possibleDirection = Direction.DOWN;
+                    setLocation(getLocation().add(directionToPoint2D(Direction.DOWN)));
                 else if (possibleDirection == Direction.UP)
-                    possibleDirection = Direction.RIGHT;
+                    setLocation(getLocation().add(directionToPoint2D(Direction.RIGHT)));
                 else if (possibleDirection == Direction.DOWN)
-                    possibleDirection = Direction.LEFT;
+                    setLocation(getLocation().add(directionToPoint2D(Direction.LEFT)));
             } else if (nextCell instanceof River) {
                 possibleDirection = findDirectionToBridge();
             }

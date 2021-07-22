@@ -50,7 +50,7 @@ public class TrainingCampCon {
         //easybuttonInTrainingCamp.setStyle("-fx-background-color: #ff0000; ");
         if (playersArchieve.getCurrentPlayer().getCards().size() == 8) {
             gameData.setBot(new EasyBot(playersArchieve.getCurrentPlayer().getLevel()));
-            changeScene(event, "/ClashRoyale/view/GameView.fxmll");
+            changeScene(event, "/ClashRoyale/view/GameView.fxml");
         } else
             ErrorLabel.setText("Cards Not Selected");
 

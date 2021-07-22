@@ -515,7 +515,7 @@ public class EntityFactory {
      */
     public static Entity createFireball(Point2D loc, boolean isEnemy, int level, GameData gameData) {
         double areaDamage = 1;
-        int radius = 3;
+        int radius = 2;
         switch (level) {
             case 1 -> areaDamage = 325;
             case 2 -> areaDamage = 357;

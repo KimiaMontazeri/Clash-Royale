@@ -186,10 +186,11 @@ public class GameManager {
 
         boolean res = addEntity(chosenCard, x, y, false, gameData.player.getLevel()); 
 
+        // if the entity is successfully added to the map
         if (res) {
             gameData.displayedCards.put(cardNum, gameData.nextCard); // replace the chosen card with the next card
             gameData.nextCard = gameData.upcomingCards.pop();        // remove the last card in upcoming cards and set it to the next card
-            gameData.upcomingCards.add(chosenCard);                  // add the chosen card to the end of the upcoming cards stack
+            gameData.upcomingCards.add(0, chosenCard);         // add the chosen card at the start of the upcoming cards stack
             gameData.elixirs -= chosenCard.getCost();
         }
         else System.out.println("couldn't place this card :(");
@@ -224,7 +225,7 @@ public class GameManager {
      * Adds a new game history to the histories of the player
      */
     public void endGame() {
-        History history = new History(gameData.player.getUsername(), gameData.winnerName);
+        History history = new History(gameData.bot.getName(), gameData.winnerName);
         gameData.player.addHistory(history);
 
         giveXpToPlayers();

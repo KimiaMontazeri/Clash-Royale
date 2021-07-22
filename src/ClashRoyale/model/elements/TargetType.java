@@ -7,5 +7,5 @@ package ClashRoyale.model.elements;
  * @version 1.0
  */
 public enum TargetType {
-    GROUND, BUILDINGS, AIR_GROUND
+    GROUND, BUILDINGS, AIR_GROUND, AIR
 }

@@ -29,7 +29,7 @@ public class BattleDeckCon {
     private Scene scene;
     private Parent root;
     PlayersArchieve playersArchieve = PlayersArchieve.getInstance();
-    int numOfSelected = 0;
+    int numOfSelected = playersArchieve.getCurrentPlayer().getCards().size();
     boolean se11 = false, sel2 = false, se13 = false, sel4 = false,
             se21 = false, se22 = false, se23 = false, se24 = false,
             se31 = false, se32 = false, se33 = false, se34 = false;
